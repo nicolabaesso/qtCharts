@@ -10,11 +10,13 @@ CONFIG += c++11
 
 SOURCES += \
     data.cpp \
+    dataHandler.cpp \
     main.cpp \
     mainwindow.cpp
 
 HEADERS += \
     data.h \
+    dataHandler.h \
     mainwindow.h
 
 FORMS += \
