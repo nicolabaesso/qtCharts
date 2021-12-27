@@ -9,6 +9,7 @@ private:
 public:
     DataHandler();
     ~DataHandler();
+    DataHandler& operator=(const DataHandler& d);
     void insertData(Data d);
 };
 #endif // DATAHANDLER_H
