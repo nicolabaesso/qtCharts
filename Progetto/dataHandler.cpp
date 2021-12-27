@@ -6,7 +6,7 @@ DataHandler::DataHandler(){
 void DataHandler::insertData(Data d){
     bool inserted=false;
     auto it=dataOnFile.begin();
-    for(;inserted && it!=dataOnFile.end();++it){
+    for(;!inserted && it!=dataOnFile.end();++it){
         if((*it).getLabel()=="default"){
             (*it)=d;
             inserted=true;

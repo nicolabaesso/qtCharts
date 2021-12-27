@@ -1,5 +1,5 @@
 QT       += core gui
-
+QT       += xml
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 CONFIG += c++11
@@ -12,15 +12,15 @@ SOURCES += \
     data.cpp \
     dataHandler.cpp \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    window.cpp
 
 HEADERS += \
     data.h \
     dataHandler.h \
-    mainwindow.h
-
-FORMS += \
-    mainwindow.ui
+    fileHandler.h \
+    mainwindow.h \
+    window.h
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

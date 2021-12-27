@@ -14,3 +14,6 @@ void Data::setLabel(string l){
 void Data::setData(double d){
     data=d;
 }
+Data::~Data(){
+    delete this;
+}
