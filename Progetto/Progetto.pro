@@ -13,16 +13,20 @@ SOURCES += \
     chart.cpp \
     data.cpp \
     dataHandler.cpp \
+    fileHandler.cpp \
     main.cpp \
     mainwindow.cpp \
     window.cpp
 
 HEADERS += \
+    barChart.h \
     chart.h \
     data.h \
     dataHandler.h \
     fileHandler.h \
+    lineChart.h \
     mainwindow.h \
+    pieChart.h \
     window.h
 
 # Default rules for deployment.

@@ -13,5 +13,6 @@ public:
     double getData() const;
     void setLabel(string l);
     void setData(double d);
+    Data& operator=(const Data& d);
 };
 #endif // DATA_H

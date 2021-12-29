@@ -1,4 +1,2 @@
 #include "chart.h"
-Chart::Chart(DataHandler d){
-    data=d;
-}
+Chart::Chart(DataHandler& d): data(d){}

@@ -14,6 +14,11 @@ void Data::setLabel(string l){
 void Data::setData(double d){
     data=d;
 }
+Data& Data::operator=(const Data& d){
+    label=d.label;
+    data=d.data;
+    return *this;
+}
 Data::~Data(){
     delete this;
 }

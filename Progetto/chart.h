@@ -6,7 +6,7 @@ private:
     DataHandler data;
 public:
    virtual ~Chart()=default;
-   Chart(DataHandler d);
+   Chart(DataHandler& d);
    virtual void setData();
 };
 #endif // CHART_H

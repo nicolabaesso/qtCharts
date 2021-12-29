@@ -21,10 +21,7 @@ DataHandler::~DataHandler(){
 }
 DataHandler& DataHandler::operator=(const DataHandler& d){
     if(this != &d){
-        auto it=dataOnFile.begin();
-        for(;it!=dataOnFile.end();++it){
-            //dataOnFile[it]=d[it];
-        }
+        dataOnFile=d.dataOnFile;
     }
     return *this;
 }
