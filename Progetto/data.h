@@ -7,8 +7,8 @@ private:
     string label;
     double data;
 public:
-    Data(string l="default",double d=0);
-    ~Data();
+    Data(string l="default",double d=0.0);
+    ~Data()=default;
     string getLabel() const;
     double getData() const;
     void setLabel(string l);

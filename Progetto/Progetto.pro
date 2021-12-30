@@ -1,6 +1,7 @@
 QT       += core gui
 QT       += xml
 QT       += charts
+QT       += core
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 CONFIG += c++11
@@ -13,9 +14,11 @@ SOURCES += \
     chart.cpp \
     data.cpp \
     dataHandler.cpp \
+    exception.cpp \
     fileHandler.cpp \
     main.cpp \
     mainwindow.cpp \
+    model.cpp \
     window.cpp
 
 HEADERS += \
@@ -23,9 +26,11 @@ HEADERS += \
     chart.h \
     data.h \
     dataHandler.h \
+    exception.h \
     fileHandler.h \
     lineChart.h \
     mainwindow.h \
+    model.h \
     pieChart.h \
     window.h
 

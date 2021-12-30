@@ -19,6 +19,3 @@ Data& Data::operator=(const Data& d){
     data=d.data;
     return *this;
 }
-Data::~Data(){
-    delete this;
-}

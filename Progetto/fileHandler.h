@@ -6,10 +6,11 @@ class FileHandler{
 private:
     QDomDocument doc;
     DataHandler readedData;
-public:
-    FileHandler();
-    void readFromFile(string name);
     void initExampleFile();
+public:
+    FileHandler(DataHandler rd=DataHandler());
+    ~FileHandler();
+    void readFromFile(string name);
     void saveFile();
 };
 

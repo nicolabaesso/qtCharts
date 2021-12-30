@@ -17,7 +17,7 @@ void DataHandler::insertData(Data d){
     }
 }
 DataHandler::~DataHandler(){
-    delete this;
+    //delete this;
 }
 DataHandler& DataHandler::operator=(const DataHandler& d){
     if(this != &d){
