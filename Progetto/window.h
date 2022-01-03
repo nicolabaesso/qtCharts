@@ -9,6 +9,8 @@
 #include <QAction>
 #include <QFrame>
 
+class Controller;
+
 class Window: public QWidget{
   Q_OBJECT
 private:

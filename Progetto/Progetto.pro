@@ -12,6 +12,7 @@ CONFIG += c++11
 
 SOURCES += \
     chart.cpp \
+    controller.cpp \
     data.cpp \
     dataHandler.cpp \
     exception.cpp \
@@ -24,6 +25,7 @@ SOURCES += \
 HEADERS += \
     barChart.h \
     chart.h \
+    controller.h \
     data.h \
     dataHandler.h \
     exception.h \

@@ -1,4 +1,5 @@
 #include "window.h"
+#include "controller.h"
 
 void Window::initMenu(QVBoxLayout* mainLayout)
 {

@@ -7,6 +7,7 @@ private:
     FileHandler file;
 public:
     Model();
+    void readFile(QString path="./example.xml");
 };
 
 #endif // MODEL_H

@@ -10,6 +10,6 @@ int main(int argc, char *argv[])
     Model m;
     Window w;
     w.show();
-
+    m.readFile();
     return a.exec();
 }

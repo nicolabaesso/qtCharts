@@ -10,7 +10,7 @@ private:
 public:
     FileHandler(DataHandler rd=DataHandler());
     ~FileHandler();
-    void readFromFile(string name);
+    void readFromFile(QString path="./example.xml");
     void saveFile();
 };
 

@@ -5,11 +5,13 @@
 using std::vector;
 class DataHandler{
 private:
+    string title;
     vector<Data> dataOnFile;
 public:
-    DataHandler();
+    DataHandler(string t="");
     ~DataHandler();
     DataHandler& operator=(const DataHandler& d);
     void insertData(Data d);
+    void setTitle(string t);
 };
 #endif // DATAHANDLER_H

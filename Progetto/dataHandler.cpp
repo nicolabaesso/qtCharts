@@ -1,6 +1,6 @@
 #include <vector>
 #include "dataHandler.h"
-DataHandler::DataHandler(){
+DataHandler::DataHandler(string t):title(t){
     dataOnFile.push_back(Data());
 }
 void DataHandler::insertData(Data d){
@@ -16,12 +16,17 @@ void DataHandler::insertData(Data d){
         dataOnFile.push_back(d);
     }
 }
+
+void DataHandler::setTitle(std::string t){
+    title=t;
+}
 DataHandler::~DataHandler(){
     //delete this;
 }
-DataHandler& DataHandler::operator=(const DataHandler& d){
-    if(this != &d){
-        dataOnFile=d.dataOnFile;
+DataHandler& DataHandler::operator=(const DataHandler& dh){
+    if(this != &dh){
+        title=dh.title;
+        dataOnFile=dh.dataOnFile;
     }
     return *this;
 }
