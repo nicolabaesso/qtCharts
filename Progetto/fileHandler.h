@@ -11,7 +11,7 @@ public:
     FileHandler(DataHandler rd=DataHandler());
     ~FileHandler();
     void readFromFile(QString path="./example.xml");
-    void saveFile();
+    void saveFile(QString path);
 };
 
 #endif // FILEHANDLER_H

@@ -8,6 +8,7 @@ private:
 public:
     Model();
     void readFile(QString path="./example.xml");
+    void saveFile(QString path);
 };
 
 #endif // MODEL_H

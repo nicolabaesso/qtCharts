@@ -14,7 +14,14 @@ public:
     void setView(Window* newView);
     void setModel(Model* newModel);
 
-signals:
+public slots:
+    /*
+    void showChart();
+    void changeChart();
+    void editData();*/
+    void openFile();
+    void saveFile();
+
 };
 
 

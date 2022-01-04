@@ -2,11 +2,6 @@
 #include "exception.h"
 FileHandler::FileHandler(DataHandler rd): readedData(rd){
     initExampleFile();
-    QFile file("./example.xml");
-    if(!file.open(QIODevice::ReadWrite | QIODevice::Text)){
-        qDebug()<<"File not open nor created.";
-    }
-    file.close();
 }
 void FileHandler::readFromFile(QString path){
     QFile file(path);
@@ -59,8 +54,28 @@ void FileHandler::initExampleFile(){
     stream<<example.toString();
     ex.close();
 }
-void FileHandler::saveFile(){
-
+void FileHandler::saveFile(QString path){
+    if(path == nullptr){
+        qDebug()<<"Cannot save file: no valid path";
+        return;
+    }
+    QDomDocument save;
+    QDomElement root=save.createElement("Title");
+    root.setAttribute("Name",QString::fromStdString(readedData.title));
+    save.appendChild(root);
+    for(unsigned int i=0;i<readedData.dataOnFile.size();i++){
+        Data sd=readedData.dataOnFile.at(i);
+        QDomElement data=save.createElement("Data");
+        data.setAttribute("ID",QString::number(i));
+        data.setAttribute("Label",QString::fromStdString(sd.getLabel()));
+        data.setAttribute("Data",sd.getData());
+        root.appendChild(data);
+    }
+    QFile s(path);
+    s.open(QIODevice::WriteOnly);
+    QTextStream stream(&s);
+    stream<<save.toString();
+    s.close();
 }
 FileHandler::~FileHandler(){
     //delete this;
