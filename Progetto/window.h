@@ -11,6 +11,14 @@
 #include <QLabel>
 #include <QDialog>
 #include <QFileDialog>
+#include <QChart>
+#include <QChartView>
+#include "lineChart.h"
+#include "pieChart.h"
+#include "barChart.h"
+
+using QtCharts::QChart;
+using QtCharts::QChartView;
 
 class Controller;
 
@@ -19,12 +27,16 @@ class Window: public QWidget{
 private:
     Controller* controller;
 
+    Chart c;
     QMenu* file;
     QMenu* chart;
 
+    QGridLayout* chartL;
+
     void initMenu(QVBoxLayout* mainLayout);
 
-    void initDataChartsLayout(QVBoxLayout* mainLayout);
+    void initDataLayout(QHBoxLayout* mainLayout);
+    void initChartLayout(QHBoxLayout* mainLayout);
 
 public:
     Window(QWidget *parent=nullptr);
@@ -32,6 +44,9 @@ public:
     QString showSaveDialog();
     QString showOpenDialog();
     void setController(Controller* c);
+    void updateChart(DataHandler d);
+    void showChart(QChart* c);
+    void createLineChart(DataHandler d);
 signals:
 
 };

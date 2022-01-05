@@ -1,5 +1,13 @@
 #include <vector>
 #include "dataHandler.h"
+const vector<Data> &DataHandler::getDataOnFile() const{
+    return dataOnFile;
+}
+
+string DataHandler::getTitle() const{
+    return title;
+}
+
 DataHandler::DataHandler(string t):title(t){
     dataOnFile.push_back(Data());
 }

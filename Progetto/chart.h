@@ -1,12 +1,16 @@
 #ifndef CHART_H
 #define CHART_H
 #include "dataHandler.h"
+#include <QChart>
+
+using QtCharts::QChart;
+
 class Chart{
-private:
+protected:
     DataHandler data;
 public:
-   virtual ~Chart()=default;
    Chart(DataHandler& d);
    virtual void setData(){};
+   virtual QChart* showChart();
 };
 #endif // CHART_H

@@ -13,12 +13,14 @@ public:
     Controller(QObject* parent=nullptr);
     void setView(Window* newView);
     void setModel(Model* newModel);
+    void loadExampleFile();
 
 public slots:
     /*
     void showChart();
     void changeChart();
     void editData();*/
+    void newFile();
     void openFile();
     void saveFile();
 

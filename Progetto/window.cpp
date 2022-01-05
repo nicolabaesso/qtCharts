@@ -1,12 +1,29 @@
 #include "window.h"
 #include "controller.h"
 
+void Window::createLineChart(DataHandler d){
+   LineChart* charted=new LineChart(d);
+   c=charted;
+}
+
 Window::Window(QWidget *parent):QWidget(parent){
     QVBoxLayout* mainLayout = new QVBoxLayout;
+    initMenu(mainLayout);
+    QHBoxLayout* visualisationLayout=new QHBoxLayout;
+    initDataLayout(visualisationLayout);
+    initChartLayout(visualisationLayout);
+    mainLayout->addLayout(visualisationLayout);
+    mainLayout->setSpacing(0);
+    setLayout(mainLayout);
+    resize(QSize(1280,720));
+    createLineChart(DataHandler());
+}
 
+
+void Window::initMenu(QVBoxLayout* mainLayout){
     QMenuBar* menuBar = new QMenuBar(this);
-    QMenu* file = new QMenu("File",menuBar);
-    QMenu* chart = new QMenu("Chart",menuBar);
+    file = new QMenu("File",menuBar);
+    chart = new QMenu("Chart",menuBar);
     file->addAction(new QAction("New",file));
     file->addAction(new QAction("Open",file));
     file->addAction(new QAction("Save",file));
@@ -16,45 +33,48 @@ Window::Window(QWidget *parent):QWidget(parent){
     menuBar->addMenu(file);
     menuBar->addMenu(chart);
     mainLayout->addWidget(menuBar);
-    //initMenu(mainLayout);
-qDebug()<<file->actions().size();
-    //initDataChartsLayout(mainLayout);
-qDebug()<<file->actions().size();
-    mainLayout->setSpacing(0);
-    setLayout(mainLayout);
-qDebug()<<file->actions().size();
-    //resize(QSize(1280,720));
 }
 
-
-void Window::initMenu(QVBoxLayout* mainLayout){
-
-}
-
-void Window::initDataChartsLayout(QVBoxLayout* mainLayout){
-    QHBoxLayout* dataChartLayout = new QHBoxLayout;
-    QFrame* charts=new QFrame;
-    charts->setMinimumSize(640,480);
-    charts->setStyleSheet("background-color: rgb(0,0,0)");
+void Window::initDataLayout(QHBoxLayout* mainLayout){
+    QGridLayout* dataL=new QGridLayout;
     QFrame* datas=new QFrame;
+    QLabel* id=new QLabel("Id",datas);
+    QLabel* label=new QLabel("Label",datas);
+    QLabel* value=new QLabel("Value",datas);
     datas->setMinimumSize(480,640);
     datas->setStyleSheet("background-color: rgb(0,255,0)");
-    dataChartLayout->addWidget(datas);
-    dataChartLayout->addWidget(charts);
-    mainLayout->addLayout(dataChartLayout);
+    datas->setLayout(dataL);
+    dataL->addWidget(id);
+    dataL->addWidget(label,0,1);
+    dataL->addWidget(value,0,2);
+    mainLayout->addWidget(datas);
+}
+
+void Window::initChartLayout(QHBoxLayout* mainLayout){
+    chartL=new QGridLayout;
+    QFrame* charts=new QFrame;
+    charts->setLayout(chartL);
+    charts->setMinimumSize(640,480);
+    charts->setStyleSheet("background-color: rgb(0,0,0)");
+    mainLayout->addWidget(charts);
 }
 
 void Window::setController(Controller* c){
-    qDebug()<<file->actions().size();
     controller=c;
-    if(file->actions().size()<1){
-        qDebug()<<"No connect!";
-    }
-    else{
-        connect(file->actions().at(1), SIGNAL(triggered()), controller, SLOT(openFile()));
-        //connect(file->actions().at(2),  SIGNAL(triggered()), controller, SLOT(saveFile()));
-        //connect(chart->actions().at(0),  SIGNAL(triggered()), controller, SLOT(/**/));
-    }
+    connect(file->actions().at(0), SIGNAL(triggered()), controller, SLOT(newFile()));
+    connect(file->actions().at(1), SIGNAL(triggered()), controller, SLOT(openFile()));
+    connect(file->actions().at(2),  SIGNAL(triggered()), controller, SLOT(saveFile()));
+    //connect(chart->actions().at(0),  SIGNAL(triggered()), controller, SLOT(/**/));
+}
+
+void Window::updateChart(DataHandler d){
+
+}
+
+void Window::showChart(QChart* c){
+    QChartView* cw = new QChartView(c);
+    cw->setRenderHint(QPainter::Antialiasing);
+    chartL->addWidget(cw);
 }
 
 void Window::showWarning(const QString& message){
