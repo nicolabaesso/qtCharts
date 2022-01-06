@@ -3,7 +3,7 @@
 FileHandler::FileHandler(DataHandler rd): readedData(rd){
     initExampleFile();
 }
-void FileHandler::readFromFile(QString path){
+DataHandler& FileHandler::readFromFile(QString path){
     QFile file(path);
     if(!file.open(QIODevice::ReadOnly | QIODevice::Text)){
         qDebug()<<"Error: File not open.";
@@ -35,7 +35,12 @@ void FileHandler::readFromFile(QString path){
         }
     }
     file.close();
+    return readedData;
 }
+DataHandler& FileHandler::getReadedData(){
+    return readedData;
+}
+
 void FileHandler::initExampleFile(){
     QDomDocument example;
     QDomElement root=example.createElement("Title");

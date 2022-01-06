@@ -10,8 +10,9 @@ private:
 public:
     FileHandler(DataHandler rd=DataHandler());
     ~FileHandler();
-    void readFromFile(QString path="./example.xml");
+    DataHandler& readFromFile(QString path="./example.xml");
     void saveFile(QString path);
+    DataHandler& getReadedData();
 };
 
 #endif // FILEHANDLER_H

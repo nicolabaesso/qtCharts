@@ -23,7 +23,9 @@ public slots:
     void newFile();
     void openFile();
     void saveFile();
-
+    void loadLineChart();
+    void loadPieChart();
+    void loadBarChart();
 };
 
 

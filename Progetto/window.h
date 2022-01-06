@@ -11,23 +11,21 @@
 #include <QLabel>
 #include <QDialog>
 #include <QFileDialog>
+#include <QPlainTextEdit>
 #include <QChart>
 #include <QChartView>
-#include "lineChart.h"
-#include "pieChart.h"
-#include "barChart.h"
 
 using QtCharts::QChart;
 using QtCharts::QChartView;
 
 class Controller;
+class DataHandler;
 
 class Window: public QWidget{
   Q_OBJECT
 private:
     Controller* controller;
 
-    Chart c;
     QMenu* file;
     QMenu* chart;
 
@@ -47,6 +45,7 @@ public:
     void updateChart(DataHandler d);
     void showChart(QChart* c);
     void createLineChart(DataHandler d);
+    QString showNewFileDialog(DataHandler& d);
 signals:
 
 };

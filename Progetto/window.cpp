@@ -1,10 +1,8 @@
 #include "window.h"
 #include "controller.h"
-
-void Window::createLineChart(DataHandler d){
-   LineChart* charted=new LineChart(d);
-   c=charted;
-}
+#include "lineChart.h"
+#include "pieChart.h"
+#include "barChart.h"
 
 Window::Window(QWidget *parent):QWidget(parent){
     QVBoxLayout* mainLayout = new QVBoxLayout;
@@ -16,7 +14,6 @@ Window::Window(QWidget *parent):QWidget(parent){
     mainLayout->setSpacing(0);
     setLayout(mainLayout);
     resize(QSize(1280,720));
-    createLineChart(DataHandler());
 }
 
 
@@ -28,7 +25,9 @@ void Window::initMenu(QVBoxLayout* mainLayout){
     file->addAction(new QAction("Open",file));
     file->addAction(new QAction("Save",file));
     file->addAction(new QAction("Close",file));
-    chart->addAction(new QAction("Change",chart));
+    chart->addAction(new QAction("Show Bar Chart",chart));
+    chart->addAction(new QAction("Show Line Chart",chart));
+    chart->addAction(new QAction("Show Pie Chart",chart));
     connect(file->actions().at(3),SIGNAL(triggered()),this,SLOT(close()));
     menuBar->addMenu(file);
     menuBar->addMenu(chart);
@@ -64,17 +63,37 @@ void Window::setController(Controller* c){
     connect(file->actions().at(0), SIGNAL(triggered()), controller, SLOT(newFile()));
     connect(file->actions().at(1), SIGNAL(triggered()), controller, SLOT(openFile()));
     connect(file->actions().at(2),  SIGNAL(triggered()), controller, SLOT(saveFile()));
-    //connect(chart->actions().at(0),  SIGNAL(triggered()), controller, SLOT(/**/));
+    connect(chart->actions().at(0),  SIGNAL(triggered()), controller, SLOT(loadBarChart()));
+    connect(chart->actions().at(1),  SIGNAL(triggered()), controller, SLOT(loadLineChart()));
+    connect(chart->actions().at(2),  SIGNAL(triggered()), controller, SLOT(loadPieChart()));
 }
 
-void Window::updateChart(DataHandler d){
-
+void Window::createLineChart(DataHandler d){
+   LineChart* charted=new LineChart(d);
+   charted->setData();
+   showChart(charted->showChart());
 }
 
 void Window::showChart(QChart* c){
     QChartView* cw = new QChartView(c);
     cw->setRenderHint(QPainter::Antialiasing);
     chartL->addWidget(cw);
+}
+
+QString Window::showNewFileDialog(DataHandler& d){
+    QDialog* dialog=new QDialog(this);
+    QPlainTextEdit* fileName=new QPlainTextEdit(this);
+    fileName->setPlainText("My chart");
+    dialog->setLayout(new QHBoxLayout);
+    dialog->layout()->addWidget(new QLabel("Set the title for your graph (WARNING, YOU CANNOT CHANGE IT!)",dialog));
+    dialog->layout()->addWidget(fileName);
+    dialog->layout()->setAlignment(Qt::AlignCenter);
+    dialog->setMinimumWidth(120);
+    dialog->setMaximumWidth(480);
+    dialog->setMinimumHeight(120);
+    dialog->setMaximumHeight(480);
+    dialog->show();
+    return nullptr;
 }
 
 void Window::showWarning(const QString& message){
