@@ -9,7 +9,7 @@ class LineChart: public Chart{
 private:
     int nPoints;
 public:
-    LineChart(DataHandler dh);
+    LineChart(DataHandler& dh);
     void setData();
     QChart* showChart();
     LineChart &operator =(const LineChart &dh);

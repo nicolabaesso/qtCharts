@@ -1,8 +1,6 @@
 #include "window.h"
 #include "controller.h"
-#include "lineChart.h"
-#include "pieChart.h"
-#include "barChart.h"
+
 
 Window::Window(QWidget *parent):QWidget(parent){
     QVBoxLayout* mainLayout = new QVBoxLayout;
@@ -68,31 +66,58 @@ void Window::setController(Controller* c){
     connect(chart->actions().at(2),  SIGNAL(triggered()), controller, SLOT(loadPieChart()));
 }
 
-void Window::createLineChart(DataHandler d){
-   LineChart* charted=new LineChart(d);
-   charted->setData();
-   showChart(charted->showChart());
+void Window::deletePreviousChart(){
+    chartL->removeWidget(chartViewer);
+    delete chartViewer;
+}
+
+void Window::createChart(Chart* c){
+    if(dynamic_cast<LineChart*>(c)){
+        static_cast<LineChart*>(c)->setData();
+        showChart(static_cast<LineChart*>(c)->showChart());
+        return;
+    }
+    if(dynamic_cast<BarChart*>(c)){
+        static_cast<BarChart*>(c)->setData();
+        showChart(static_cast<BarChart*>(c)->showChart());
+        return;
+    }
+    if(dynamic_cast<PieChart*>(c)){
+        static_cast<PieChart*>(c)->setData();
+        showChart(static_cast<PieChart*>(c)->showChart());
+        return;
+    }
 }
 
 void Window::showChart(QChart* c){
-    QChartView* cw = new QChartView(c);
-    cw->setRenderHint(QPainter::Antialiasing);
-    chartL->addWidget(cw);
+    chartViewer = new QChartView(c);
+    chartViewer->setRenderHint(QPainter::Antialiasing);
+    chartL->addWidget(chartViewer);
 }
 
 QString Window::showNewFileDialog(DataHandler& d){
     QDialog* dialog=new QDialog(this);
-    QPlainTextEdit* fileName=new QPlainTextEdit(this);
+    fileName=new QPlainTextEdit(this);
+    //QDialogButtonBox* confirm=new QDialogButtonBox(this);
+    QPushButton* ok=new QPushButton(this);
     fileName->setPlainText("My chart");
-    dialog->setLayout(new QHBoxLayout);
+    dialog->setLayout(new QGridLayout);
     dialog->layout()->addWidget(new QLabel("Set the title for your graph (WARNING, YOU CANNOT CHANGE IT!)",dialog));
     dialog->layout()->addWidget(fileName);
-    dialog->layout()->setAlignment(Qt::AlignCenter);
+    dialog->layout()->addWidget(ok);
     dialog->setMinimumWidth(120);
     dialog->setMaximumWidth(480);
     dialog->setMinimumHeight(120);
     dialog->setMaximumHeight(480);
     dialog->show();
+    /*QKeyEvent* click=new QKeyEvent(QEvent::KeyPress, Qt::Key_Enter, Qt::NoModifier);
+    QString tString="";
+    while(true){
+        if(click->key()==Qt::Key_Enter){
+            tString=fileName->toPlainText();
+            d.setTitle(tString.toStdString());
+        }
+    }*/
     return nullptr;
 }
 

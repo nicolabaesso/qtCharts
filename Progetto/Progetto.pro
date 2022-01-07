@@ -11,6 +11,7 @@ CONFIG += c++11
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    barChart.cpp \
     lineChart.cpp \
     chart.cpp \
     controller.cpp \
@@ -21,6 +22,7 @@ SOURCES += \
     main.cpp \
     mainwindow.cpp \
     model.cpp \
+    pieChart.cpp \
     window.cpp
 
 HEADERS += \
@@ -41,6 +43,3 @@ HEADERS += \
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
-
-FORMS += \
-    form.ui

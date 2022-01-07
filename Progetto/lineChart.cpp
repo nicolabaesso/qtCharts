@@ -1,15 +1,15 @@
 #include "lineChart.h"
-LineChart::LineChart(DataHandler dh):Chart(dh),nPoints(0){}
+LineChart::LineChart(DataHandler& dh):Chart(dh),nPoints(0){}
 void LineChart::setData(){
     auto it=data.getDataOnFile().begin();
     for(;it!=data.getDataOnFile().end();++it){
         nPoints++;
     }
 }
-LineChart& LineChart::operator=(const LineChart& l){
-    if(this != &l){
-        nPoints=l.nPoints;
-        data=l.data;
+LineChart& LineChart::operator=(const LineChart& lc){
+    if(this != &lc){
+        nPoints=lc.nPoints;
+        data=lc.data;
     }
     return *this;
 }

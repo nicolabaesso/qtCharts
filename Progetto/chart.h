@@ -12,5 +12,6 @@ public:
    Chart(DataHandler& d);
    virtual void setData(){};
    virtual QChart* showChart();
+   Chart &operator =(const Chart &c);
 };
 #endif // CHART_H

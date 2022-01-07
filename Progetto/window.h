@@ -14,27 +14,37 @@
 #include <QPlainTextEdit>
 #include <QChart>
 #include <QChartView>
+#include <QDialogButtonBox>
+#include <QPushButton>
+#include "chart.h"
+#include "lineChart.h"
+#include "pieChart.h"
+#include "barChart.h"
 
 using QtCharts::QChart;
 using QtCharts::QChartView;
 
 class Controller;
-class DataHandler;
 
 class Window: public QWidget{
   Q_OBJECT
 private:
     Controller* controller;
 
+    Chart* c;
+
     QMenu* file;
     QMenu* chart;
-
+    QPlainTextEdit* fileName;
+    QChartView* chartViewer;
     QGridLayout* chartL;
 
     void initMenu(QVBoxLayout* mainLayout);
 
     void initDataLayout(QHBoxLayout* mainLayout);
     void initChartLayout(QHBoxLayout* mainLayout);
+
+    void initChart();
 
 public:
     Window(QWidget *parent=nullptr);
@@ -44,8 +54,9 @@ public:
     void setController(Controller* c);
     void updateChart(DataHandler d);
     void showChart(QChart* c);
-    void createLineChart(DataHandler d);
+    void createChart(Chart *c);
     QString showNewFileDialog(DataHandler& d);
+    void deletePreviousChart();
 signals:
 
 };
