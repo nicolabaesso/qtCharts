@@ -20,7 +20,6 @@ SOURCES += \
     exception.cpp \
     fileHandler.cpp \
     main.cpp \
-    mainwindow.cpp \
     model.cpp \
     pieChart.cpp \
     window.cpp
@@ -34,7 +33,6 @@ HEADERS += \
     exception.h \
     fileHandler.h \
     lineChart.h \
-    mainwindow.h \
     model.h \
     pieChart.h \
     window.h
