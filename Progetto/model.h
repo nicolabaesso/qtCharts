@@ -10,6 +10,7 @@ public:
     DataHandler& readFile(QString path="./example.xml");
     void saveFile(QString path);
     DataHandler& getData();
+    DataHandler& readExampleFile(QString path="./example.xml");
 };
 
 #endif // MODEL_H

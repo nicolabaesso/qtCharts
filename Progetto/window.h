@@ -31,21 +31,26 @@ class Window: public QWidget{
 private:
     Controller* controller;
 
-    Chart* c;
-
     QMenu* file;
     QMenu* chart;
     QPlainTextEdit* fileName;
     QChartView* chartViewer;
     QGridLayout* chartL;
+    QGridLayout* dataL;
+    QPushButton* addDataButton;
+    QPushButton* newFileButton;
+    QPushButton* openFileButton;
+    QPushButton* saveFileButton;
+    QPushButton* loadBarChartButton;
+    QPushButton* loadLineChartButton;
+    QPushButton* loadPieChartButton;
 
-    void initMenu(QVBoxLayout* mainLayout);
+    void initMenu(QHBoxLayout *mainLayout);
 
     void initDataLayout(QHBoxLayout* mainLayout);
     void initChartLayout(QHBoxLayout* mainLayout);
 
-    void initChart();
-
+    void initToolBar(QHBoxLayout *mainLayout);
 public:
     Window(QWidget *parent=nullptr);
     void showWarning(const QString& message);

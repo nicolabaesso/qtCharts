@@ -1,7 +1,12 @@
 #include "model.h"
 Model::Model(){}
 
+DataHandler& Model::readExampleFile(QString path){
+    return file.readFromFile(path);
+}
+
 DataHandler& Model::readFile(QString path){
+    file.clearData();
     return file.readFromFile(path);
 }
 

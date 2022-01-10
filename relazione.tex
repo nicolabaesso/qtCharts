@@ -1,0 +1,82 @@
+% Don't change anything in this top section!
+
+\documentclass[10pt]{article} 
+
+\usepackage{graphicx,gb4e,qtree,latexsym,tree-dvips,times,tipa,stmaryrd}
+\usepackage[normalem]{ulem}
+\usepackage[]{natbib}
+
+
+\newcommand{\denplain}[1]{$\llbracket$#1$\rrbracket$} 
+
+\newcommand{\denote}[2][]{$\llbracket$#2$\rrbracket$^{{\ensuremath #1}}} 
+
+\newcommand{\ab}[1]{$\langle$#1$\rangle$}
+
+\newcommand{\refp}[1]{(\protect\ref{#1})}
+
+\newcommand{\itab}[1]{\hspace{0em}\rlap{#1}}
+\newcommand{\tab}[1]{\hspace{.2\textwidth}\rlap{#1}}
+
+\setlength{\parindent}{.5 in}
+\setlength{\textwidth}{6.5 in}
+\setlength{\oddsidemargin}{0 in}
+\setlength{\textheight}{9.0 in}
+\setlength{\topmargin}{-0.7 in}
+
+
+\pagestyle{empty}
+
+\author{Nicola Baesso}
+\title{Relazione Progetto}
+\date{29 Novembre 2021}
+
+\begin{document}
+	\setlength{\baselineskip}{13 pt}
+	
+	\maketitle
+	
+	% Here is the part of the .tex file that you have to worry about!
+	
+	29/11/2021 (2 ore): creazione progetto tramite l'utilizzo di video d tutor
+	
+	04/12/2021 (1 ora): creazione UML classi
+	
+	06/12/2021 (1 ora): proseguo UML
+	
+	18/12/2021 (1 ora): inizio stesura codice, header e classe "data". Next step: "dataHandler"
+	
+	20/12/2021 (1 ora): continuo stesura codice. Next step gestione file XML
+	
+	27/12/2021 (3 ore): stesura codice GUI, classe Chart per la visualizzazione, modifica di datahandler. Next step: implementazione della gestione file XML in DataHandler
+	
+	29/12/2021 (2 ore): continuazione di codice per fileHandler, creazione header per i grafici.
+     
+    30/12/2021 (3 ore): creazione della classe model per il collegamento di model e view, bug fixes, creazione di exception.
+    
+    03/01/2022 (3 ore): modifica uml, metodo di lettura dati da file. Inizio classe Controller
+    
+    04/01/2022 (6 ore): continuo UML, continuo controller.
+    
+    05/01/2022 (3 ore): continuo controller, classi Chart.
+    
+    07/01/2022 (6 ore): continuo view e charts
+    
+    10/01/2022 (2 ore): continuo view e controller
+    \newpage
+    \tableofcontents
+    \newpage
+    \section{Introduzione}
+     Questo progetto riguarda un applicativo C++ per la visione di dati sotto forma di grafici, fruibile tramite GUI grazie all' utilizzo del framework Qt.
+    \section{Funzionamento dell'appilcativo}
+    \subsection{Avvio e schermata iniziale}
+    \subsection{GUI}
+    \section{Tempistiche(Ore di lavoro)}
+    \section{Caratteristiche tecniche}
+    \subsection{URL e classi coinvolte}
+    \subsection{Gerarchie di tipi}
+    \subsection{Chiamate polimorfe}
+    \subsection{Formato di file usato per I/O di file}
+	% That's it!
+	
+\end{document}

@@ -85,3 +85,8 @@ void FileHandler::saveFile(QString path){
 FileHandler::~FileHandler(){
     //delete this;
 }
+
+void FileHandler::clearData(){
+    DataHandler noData=DataHandler();
+    readedData=noData;
+}

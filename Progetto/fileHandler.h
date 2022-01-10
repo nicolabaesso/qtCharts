@@ -13,6 +13,7 @@ public:
     DataHandler& readFromFile(QString path="./example.xml");
     void saveFile(QString path);
     DataHandler& getReadedData();
+    void clearData();
 };
 
 #endif // FILEHANDLER_H

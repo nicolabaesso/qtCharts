@@ -4,10 +4,15 @@
 
 Window::Window(QWidget *parent):QWidget(parent){
     QVBoxLayout* mainLayout = new QVBoxLayout;
-    initMenu(mainLayout);
+    QHBoxLayout* menuLayout=new QHBoxLayout;
+    initMenu(menuLayout);
+    QHBoxLayout* toolbarLayout=new QHBoxLayout;
+    initToolBar(toolbarLayout);
     QHBoxLayout* visualisationLayout=new QHBoxLayout;
     initDataLayout(visualisationLayout);
     initChartLayout(visualisationLayout);
+    mainLayout->addLayout(menuLayout);
+    mainLayout->addLayout(toolbarLayout);
     mainLayout->addLayout(visualisationLayout);
     mainLayout->setSpacing(0);
     setLayout(mainLayout);
@@ -15,7 +20,7 @@ Window::Window(QWidget *parent):QWidget(parent){
 }
 
 
-void Window::initMenu(QVBoxLayout* mainLayout){
+void Window::initMenu(QHBoxLayout* mainLayout){
     QMenuBar* menuBar = new QMenuBar(this);
     file = new QMenu("File",menuBar);
     chart = new QMenu("Chart",menuBar);
@@ -32,18 +37,41 @@ void Window::initMenu(QVBoxLayout* mainLayout){
     mainLayout->addWidget(menuBar);
 }
 
+void Window::initToolBar(QHBoxLayout* mainLayout){
+    newFileButton=new QPushButton(this);
+    openFileButton=new QPushButton(this);
+    saveFileButton=new QPushButton(this);
+    loadBarChartButton=new QPushButton(this);
+    loadLineChartButton=new QPushButton(this);
+    loadPieChartButton=new QPushButton(this);
+    newFileButton->setText("New File");
+    openFileButton->setText("Open File");
+    saveFileButton->setText("Save File");
+    loadBarChartButton->setText("Load Bar Chart");
+    loadLineChartButton->setText("Load Line Chart");
+    loadPieChartButton->setText("Load Pie Chart");
+    mainLayout->addWidget(newFileButton);
+    mainLayout->addWidget(openFileButton);
+    mainLayout->addWidget(saveFileButton);
+    mainLayout->addWidget(loadBarChartButton);
+    mainLayout->addWidget(loadLineChartButton);
+    mainLayout->addWidget(loadPieChartButton);
+}
+
 void Window::initDataLayout(QHBoxLayout* mainLayout){
-    QGridLayout* dataL=new QGridLayout;
+    dataL=new QGridLayout;
     QFrame* datas=new QFrame;
     QLabel* id=new QLabel("Id",datas);
     QLabel* label=new QLabel("Label",datas);
     QLabel* value=new QLabel("Value",datas);
+    addDataButton=new QPushButton(this);
+    addDataButton->setText("Add data");
     datas->setMinimumSize(480,640);
-    datas->setStyleSheet("background-color: rgb(0,255,0)");
     datas->setLayout(dataL);
-    dataL->addWidget(id);
-    dataL->addWidget(label,0,1);
-    dataL->addWidget(value,0,2);
+    dataL->addWidget(addDataButton,0,1);
+    dataL->addWidget(id,1,0);
+    dataL->addWidget(label,1,1);
+    dataL->addWidget(value,1,2);
     mainLayout->addWidget(datas);
 }
 
@@ -52,7 +80,6 @@ void Window::initChartLayout(QHBoxLayout* mainLayout){
     QFrame* charts=new QFrame;
     charts->setLayout(chartL);
     charts->setMinimumSize(640,480);
-    charts->setStyleSheet("background-color: rgb(0,0,0)");
     mainLayout->addWidget(charts);
 }
 
@@ -64,6 +91,12 @@ void Window::setController(Controller* c){
     connect(chart->actions().at(0),  SIGNAL(triggered()), controller, SLOT(loadBarChart()));
     connect(chart->actions().at(1),  SIGNAL(triggered()), controller, SLOT(loadLineChart()));
     connect(chart->actions().at(2),  SIGNAL(triggered()), controller, SLOT(loadPieChart()));
+    connect(newFileButton, SIGNAL(clicked()), controller, SLOT(newFile()));
+    connect(openFileButton, SIGNAL(clicked()), controller, SLOT(openFile()));
+    connect(saveFileButton, SIGNAL(clicked()), controller, SLOT(saveFile()));
+    connect(loadBarChartButton, SIGNAL(clicked()), controller, SLOT(loadBarChart()));
+    connect(loadLineChartButton, SIGNAL(clicked()), controller, SLOT(loadLineChart()));
+    connect(loadPieChartButton, SIGNAL(clicked()), controller, SLOT(loadPieChart()));
 }
 
 void Window::deletePreviousChart(){
@@ -98,13 +131,14 @@ void Window::showChart(QChart* c){
 QString Window::showNewFileDialog(DataHandler& d){
     QDialog* dialog=new QDialog(this);
     fileName=new QPlainTextEdit(this);
-    //QDialogButtonBox* confirm=new QDialogButtonBox(this);
     QPushButton* ok=new QPushButton(this);
+    QGridLayout* dialogLayout=new QGridLayout(this);
     fileName->setPlainText("My chart");
-    dialog->setLayout(new QGridLayout);
-    dialog->layout()->addWidget(new QLabel("Set the title for your graph (WARNING, YOU CANNOT CHANGE IT!)",dialog));
-    dialog->layout()->addWidget(fileName);
-    dialog->layout()->addWidget(ok);
+    ok->setText("Ok");
+    dialog->setLayout(dialogLayout);
+    dialogLayout->addWidget(new QLabel("Set the title for your graph (WARNING, YOU CANNOT CHANGE IT!)",dialog),0,1);
+    dialogLayout->addWidget(fileName,1,1);
+    dialogLayout->addWidget(ok,2,1);
     dialog->setMinimumWidth(120);
     dialog->setMaximumWidth(480);
     dialog->setMinimumHeight(120);

@@ -7,7 +7,7 @@ void Controller::setModel(Model* newModel){
 }
 
 void Controller::loadExampleFile(){
-    DataHandler exampleData=model->readFile("./example.xml");
+    DataHandler exampleData=model->readExampleFile("./example.xml");
     LineChart* exampleChart=new LineChart(exampleData);
     view->createChart(exampleChart);
 }
@@ -36,7 +36,11 @@ void Controller::openFile(){
         if(path == nullptr){
             throw std::runtime_error("Error: file not open. Not a correct path");
         }
-        model->readFile(path);
+        DataHandler readedData=model->readFile(path);
+        view->deletePreviousChart();
+        LineChart* newLineChart=new LineChart(readedData);
+        view->createChart(newLineChart);
+        view->showWarning("File successfully opened!");
     }
     catch(std::runtime_error exc){
         view->showWarning(exc.what());
@@ -50,6 +54,7 @@ void Controller::saveFile(){
             throw std::runtime_error("Error: file not saved. Not a correct path.");
         }
         model->saveFile(path);
+        view->showWarning("File successfully saved!");
     }
     catch(std::runtime_error exc){
         view->showWarning(exc.what());

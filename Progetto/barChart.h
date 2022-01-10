@@ -14,7 +14,7 @@ public:
     BarChart(DataHandler& dh);
     void setData();
     QChart* showChart();
-    BarChart &operator =(const BarChart &pc);
+    BarChart &operator =(const BarChart &bc);
 };
 
 #endif // BARCHART_H
