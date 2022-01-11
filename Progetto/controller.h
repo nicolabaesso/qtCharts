@@ -21,6 +21,7 @@ public slots:
     void changeChart();
     void editData();*/
     void newFile();
+    void manageNewFile();
     void openFile();
     void saveFile();
     void loadLineChart();

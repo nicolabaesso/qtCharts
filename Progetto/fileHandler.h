@@ -14,6 +14,7 @@ public:
     void saveFile(QString path);
     DataHandler& getReadedData();
     void clearData();
+    void setReadedData(const DataHandler &newReadedData);
 };
 
 #endif // FILEHANDLER_H

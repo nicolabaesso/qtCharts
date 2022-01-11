@@ -41,6 +41,10 @@ DataHandler& FileHandler::getReadedData(){
     return readedData;
 }
 
+void FileHandler::setReadedData(const DataHandler& newReadedData){
+    readedData = newReadedData;
+}
+
 void FileHandler::initExampleFile(){
     QDomDocument example;
     QDomElement root=example.createElement("Title");

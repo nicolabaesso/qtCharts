@@ -37,6 +37,7 @@ private:
     QChartView* chartViewer;
     QGridLayout* chartL;
     QGridLayout* dataL;
+    QGridLayout* dialogLayout;
     QPushButton* addDataButton;
     QPushButton* newFileButton;
     QPushButton* openFileButton;
@@ -44,6 +45,8 @@ private:
     QPushButton* loadBarChartButton;
     QPushButton* loadLineChartButton;
     QPushButton* loadPieChartButton;
+    QPushButton* confirmNewFileButton;
+    QDialog* newFileDialog;
 
     void initMenu(QHBoxLayout *mainLayout);
 
@@ -60,9 +63,9 @@ public:
     void updateChart(DataHandler d);
     void showChart(QChart* c);
     void createChart(Chart *c);
-    QString showNewFileDialog(DataHandler& d);
+    void showNewFileDialog();
     void deletePreviousChart();
-signals:
-
+    QString getNewFileName();
+    void closeNewFileDialog();
 };
 #endif // WINDOW_H

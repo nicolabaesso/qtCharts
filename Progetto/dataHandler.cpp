@@ -28,9 +28,6 @@ void DataHandler::insertData(Data d){
 void DataHandler::setTitle(std::string t){
     title=t;
 }
-DataHandler::~DataHandler(){
-    //delete this;
-}
 DataHandler& DataHandler::operator=(const DataHandler& dh){
     if(this != &dh){
         title=dh.title;

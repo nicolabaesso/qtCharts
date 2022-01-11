@@ -11,6 +11,7 @@ public:
     void saveFile(QString path);
     DataHandler& getData();
     DataHandler& readExampleFile(QString path="./example.xml");
+    void setData(DataHandler d);
 };
 
 #endif // MODEL_H

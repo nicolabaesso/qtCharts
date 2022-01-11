@@ -17,3 +17,7 @@ void Model::saveFile(QString path){
 DataHandler& Model::getData(){
     return file.getReadedData();
 }
+
+void Model::setData(DataHandler d){
+    file.setReadedData(d);
+}

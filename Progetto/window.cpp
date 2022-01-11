@@ -19,6 +19,12 @@ Window::Window(QWidget *parent):QWidget(parent){
     resize(QSize(1280,720));
 }
 
+QString Window::getNewFileName(){
+    if(fileName==nullptr){
+        return "My Chart";
+    }
+    return fileName->toPlainText();
+}
 
 void Window::initMenu(QHBoxLayout* mainLayout){
     QMenuBar* menuBar = new QMenuBar(this);
@@ -128,31 +134,30 @@ void Window::showChart(QChart* c){
     chartL->addWidget(chartViewer);
 }
 
-QString Window::showNewFileDialog(DataHandler& d){
-    QDialog* dialog=new QDialog(this);
+void Window::showNewFileDialog(){
+    newFileDialog=new QDialog(this);
     fileName=new QPlainTextEdit(this);
-    QPushButton* ok=new QPushButton(this);
-    QGridLayout* dialogLayout=new QGridLayout(this);
+    confirmNewFileButton=new QPushButton(this);
+    dialogLayout=new QGridLayout(this);
     fileName->setPlainText("My chart");
-    ok->setText("Ok");
-    dialog->setLayout(dialogLayout);
-    dialogLayout->addWidget(new QLabel("Set the title for your graph (WARNING, YOU CANNOT CHANGE IT!)",dialog),0,1);
+    confirmNewFileButton->setText("Ok");
+    newFileDialog->setLayout(dialogLayout);
+    dialogLayout->addWidget(new QLabel("Set the title for your graph (WARNING, YOU CANNOT CHANGE IT!)",newFileDialog),0,1);
     dialogLayout->addWidget(fileName,1,1);
-    dialogLayout->addWidget(ok,2,1);
-    dialog->setMinimumWidth(120);
-    dialog->setMaximumWidth(480);
-    dialog->setMinimumHeight(120);
-    dialog->setMaximumHeight(480);
-    dialog->show();
-    /*QKeyEvent* click=new QKeyEvent(QEvent::KeyPress, Qt::Key_Enter, Qt::NoModifier);
-    QString tString="";
-    while(true){
-        if(click->key()==Qt::Key_Enter){
-            tString=fileName->toPlainText();
-            d.setTitle(tString.toStdString());
-        }
-    }*/
-    return nullptr;
+    dialogLayout->addWidget(confirmNewFileButton,2,1);
+    dialogLayout->addWidget(new QLabel("",newFileDialog),2,0);
+    dialogLayout->addWidget(new QLabel("",newFileDialog),2,2);
+    newFileDialog->setMinimumWidth(120);
+    newFileDialog->setMaximumWidth(480);
+    newFileDialog->setMinimumHeight(120);
+    newFileDialog->setMaximumHeight(480);
+    newFileDialog->show();
+    connect(confirmNewFileButton, SIGNAL(clicked()), controller, SLOT(manageNewFile()));
+}
+
+void Window::closeNewFileDialog(){
+    newFileDialog->close();
+    delete newFileDialog;
 }
 
 void Window::showWarning(const QString& message){

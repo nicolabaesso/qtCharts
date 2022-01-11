@@ -14,7 +14,7 @@ private:
     friend class FileHandler;
 public:
     DataHandler(string t="");
-    ~DataHandler();
+    ~DataHandler()=default;
     DataHandler& operator=(const DataHandler& dh);
     void insertData(Data d);
     void setTitle(string t);
