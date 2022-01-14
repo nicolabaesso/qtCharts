@@ -35,3 +35,26 @@ DataHandler& DataHandler::operator=(const DataHandler& dh){
     }
     return *this;
 }
+
+double DataHandler::getMinData(){
+    double min=dataOnFile.at(0).getData();
+    bool inserted=false;
+    auto it=dataOnFile.begin();
+    for(;!inserted && it!=dataOnFile.end();++it){
+        if((*it).getData()<min){
+            min=(*it).getData();
+        }
+    }
+    return min;
+}
+double DataHandler::getMaxData(){
+    double max=dataOnFile.at(0).getData();
+    bool inserted=false;
+    auto it=dataOnFile.begin();
+    for(;!inserted && it!=dataOnFile.end();++it){
+        if((*it).getData()>max){
+            max=(*it).getData();
+        }
+    }
+    return max;
+}

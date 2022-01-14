@@ -8,6 +8,7 @@ void Controller::setModel(Model* newModel){
 
 void Controller::loadExampleFile(){
     DataHandler exampleData=model->readExampleFile("./example.xml");
+    view->initDataValues(exampleData);
     LineChart* exampleChart=new LineChart(exampleData);
     view->createChart(exampleChart);
 }

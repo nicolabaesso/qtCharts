@@ -3,9 +3,11 @@
 #include "chart.h"
 #include <QBarSet>
 #include <QBarSeries>
+#include <QValueAxis>
 
 using QtCharts::QBarSet;
 using QtCharts::QBarSeries;
+using QtCharts::QValueAxis;
 
 class BarChart: public Chart{
 private:

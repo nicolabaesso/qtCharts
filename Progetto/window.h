@@ -31,6 +31,8 @@ class Window: public QWidget{
 private:
     Controller* controller;
 
+    vector<QPlainTextEdit> labelVector;
+    vector<QPlainTextEdit> dataVector;
     QMenu* file;
     QMenu* chart;
     QPlainTextEdit* fileName;
@@ -48,18 +50,24 @@ private:
     QPushButton* confirmNewFileButton;
     QDialog* newFileDialog;
 
+    int rowGridLayoutData;
+    int columnGridLayoutData;
+
     void initMenu(QHBoxLayout *mainLayout);
 
     void initDataLayout(QHBoxLayout* mainLayout);
     void initChartLayout(QHBoxLayout* mainLayout);
 
     void initToolBar(QHBoxLayout *mainLayout);
+
+   // void initVectors(DataHandler readedData);
 public:
     Window(QWidget *parent=nullptr);
     void showWarning(const QString& message);
     QString showSaveDialog();
     QString showOpenDialog();
     void setController(Controller* c);
+    void initDataValues(DataHandler readedData);
     void updateChart(DataHandler d);
     void showChart(QChart* c);
     void createChart(Chart *c);

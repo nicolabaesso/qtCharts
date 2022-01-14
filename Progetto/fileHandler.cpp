@@ -48,7 +48,7 @@ void FileHandler::setReadedData(const DataHandler& newReadedData){
 void FileHandler::initExampleFile(){
     QDomDocument example;
     QDomElement root=example.createElement("Title");
-    root.setAttribute("Name","Example data");
+    root.setAttribute("Name","Dati d'esempio");
     example.appendChild(root);
     for(int i=0;i<5;i++){
         QDomElement data=example.createElement("Data");

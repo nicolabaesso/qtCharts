@@ -20,5 +20,7 @@ public:
     void setTitle(string t);
     const vector<Data> &getDataOnFile() const;
     string getTitle() const;
+    double getMinData();
+    double getMaxData();
 };
 #endif // DATAHANDLER_H

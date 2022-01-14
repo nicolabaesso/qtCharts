@@ -8,11 +8,14 @@ Window::Window(QWidget *parent):QWidget(parent){
     initMenu(menuLayout);
     QHBoxLayout* toolbarLayout=new QHBoxLayout;
     initToolBar(toolbarLayout);
+    QHBoxLayout* containerLayout=new QHBoxLayout;
+    containerLayout->addLayout(toolbarLayout);
+    containerLayout->addWidget(new QLabel);
     QHBoxLayout* visualisationLayout=new QHBoxLayout;
     initDataLayout(visualisationLayout);
     initChartLayout(visualisationLayout);
     mainLayout->addLayout(menuLayout);
-    mainLayout->addLayout(toolbarLayout);
+    mainLayout->addLayout(containerLayout);
     mainLayout->addLayout(visualisationLayout);
     mainLayout->setSpacing(0);
     setLayout(mainLayout);
@@ -21,7 +24,7 @@ Window::Window(QWidget *parent):QWidget(parent){
 
 QString Window::getNewFileName(){
     if(fileName==nullptr){
-        return "My Chart";
+        return "Il mio grafico";
     }
     return fileName->toPlainText();
 }
@@ -29,14 +32,14 @@ QString Window::getNewFileName(){
 void Window::initMenu(QHBoxLayout* mainLayout){
     QMenuBar* menuBar = new QMenuBar(this);
     file = new QMenu("File",menuBar);
-    chart = new QMenu("Chart",menuBar);
-    file->addAction(new QAction("New",file));
-    file->addAction(new QAction("Open",file));
-    file->addAction(new QAction("Save",file));
-    file->addAction(new QAction("Close",file));
-    chart->addAction(new QAction("Show Bar Chart",chart));
-    chart->addAction(new QAction("Show Line Chart",chart));
-    chart->addAction(new QAction("Show Pie Chart",chart));
+    chart = new QMenu("Grafico",menuBar);
+    file->addAction(new QAction("Nuovo",file));
+    file->addAction(new QAction("Apri",file));
+    file->addAction(new QAction("Salva",file));
+    file->addAction(new QAction("Chiudi",file));
+    chart->addAction(new QAction("Mostra Istogramma",chart));
+    chart->addAction(new QAction("Mostra Diagramma Cartesiano",chart));
+    chart->addAction(new QAction("Mostra Areogramma (a torta)",chart));
     connect(file->actions().at(3),SIGNAL(triggered()),this,SLOT(close()));
     menuBar->addMenu(file);
     menuBar->addMenu(chart);
@@ -50,12 +53,12 @@ void Window::initToolBar(QHBoxLayout* mainLayout){
     loadBarChartButton=new QPushButton(this);
     loadLineChartButton=new QPushButton(this);
     loadPieChartButton=new QPushButton(this);
-    newFileButton->setText("New File");
-    openFileButton->setText("Open File");
-    saveFileButton->setText("Save File");
-    loadBarChartButton->setText("Load Bar Chart");
-    loadLineChartButton->setText("Load Line Chart");
-    loadPieChartButton->setText("Load Pie Chart");
+    newFileButton->setText("Nuovo File");
+    openFileButton->setText("Apri File");
+    saveFileButton->setText("Salva File");
+    loadBarChartButton->setText("Mostra Istogramma");
+    loadLineChartButton->setText("Mostra Diagramma Cartesiano");
+    loadPieChartButton->setText("Mostra Areogramma a torta");
     mainLayout->addWidget(newFileButton);
     mainLayout->addWidget(openFileButton);
     mainLayout->addWidget(saveFileButton);
@@ -65,6 +68,8 @@ void Window::initToolBar(QHBoxLayout* mainLayout){
 }
 
 void Window::initDataLayout(QHBoxLayout* mainLayout){
+    rowGridLayoutData=0;
+    columnGridLayoutData=0;
     dataL=new QGridLayout;
     QFrame* datas=new QFrame;
     QLabel* id=new QLabel("Id",datas);
@@ -74,12 +79,53 @@ void Window::initDataLayout(QHBoxLayout* mainLayout){
     addDataButton->setText("Add data");
     datas->setMinimumSize(480,640);
     datas->setLayout(dataL);
-    dataL->addWidget(addDataButton,0,1);
-    dataL->addWidget(id,1,0);
-    dataL->addWidget(label,1,1);
-    dataL->addWidget(value,1,2);
+    dataL->addWidget(addDataButton,rowGridLayoutData,1);
+    rowGridLayoutData++;
+    dataL->addWidget(id,rowGridLayoutData,columnGridLayoutData);
+    columnGridLayoutData++;
+    dataL->addWidget(label,rowGridLayoutData,columnGridLayoutData);
+    columnGridLayoutData++;
+    dataL->addWidget(value,rowGridLayoutData,columnGridLayoutData);
+    columnGridLayoutData=0;
     mainLayout->addWidget(datas);
 }
+
+void Window::initDataValues(DataHandler readedData){
+    //initVectors(readedData);
+    QLabel* id;
+    //QPlainTextEdit* labelEdit=new QPlainTextEdit;
+    //QPlainTextEdit* dataEdit=new QPlainTextEdit;
+    int size=readedData.getDataOnFile().size();
+    QString pos="";
+    QString lab="";
+    QString data="";
+    for(int i=0;i<size;i++){
+        string p=std::to_string(i);
+        id=new QLabel(pos.fromStdString(p));
+        dataL->addWidget(id,rowGridLayoutData,columnGridLayoutData);
+        //columnGridLayoutData++;
+        lab=lab.fromStdString(readedData.getDataOnFile().at(i).getLabel());
+        //labelEdit->setPlainText(lab);
+        //labelVector.push_back(*labelEdit);
+        //dataL->addWidget(&labelVector.at(i),rowGridLayoutData,columnGridLayoutData);
+        //columnGridLayoutData++;
+        data=data.number(readedData.getDataOnFile().at(i).getData());
+        //dataEdit->setPlainText(data);
+        //dataVector.push_back(*dataEdit);
+        //dataL->addWidget(&dataVector.at(i),rowGridLayoutData,columnGridLayoutData);
+        rowGridLayoutData++;
+        //columnGridLayoutData=0;
+    }
+}
+/*
+void Window::initVectors(DataHandler readedData){
+    QPlainTextEdit* label=new QPlainTextEdit;
+    QPlainTextEdit* data=new QPlainTextEdit;
+    for(unsigned int i=0;i<readedData.getDataOnFile().size();i++){
+        labelVector.push_back(*label);
+        dataVector.push_back(*data);
+    }
+}*/
 
 void Window::initChartLayout(QHBoxLayout* mainLayout){
     chartL=new QGridLayout;
@@ -139,10 +185,10 @@ void Window::showNewFileDialog(){
     fileName=new QPlainTextEdit(this);
     confirmNewFileButton=new QPushButton(this);
     dialogLayout=new QGridLayout(this);
-    fileName->setPlainText("My chart");
+    fileName->setPlainText("Il mio grafico");
     confirmNewFileButton->setText("Ok");
     newFileDialog->setLayout(dialogLayout);
-    dialogLayout->addWidget(new QLabel("Set the title for your graph (WARNING, YOU CANNOT CHANGE IT!)",newFileDialog),0,1);
+    dialogLayout->addWidget(new QLabel("Scrivi un titolo per il tuo grafico (Attenzione, non lo potrai cambiare!)",newFileDialog),0,1);
     dialogLayout->addWidget(fileName,1,1);
     dialogLayout->addWidget(confirmNewFileButton,2,1);
     dialogLayout->addWidget(new QLabel("",newFileDialog),2,0);

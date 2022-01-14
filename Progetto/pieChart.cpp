@@ -17,6 +17,7 @@ QChart* PieChart::showChart(){
     QChart* pieChart=new QChart();
     pieChart->addSeries(pieSeries);
     labelS=labelS.fromStdString(data.getTitle());
+    pieChart->setAnimationOptions(QChart::SeriesAnimations);
     pieChart->setTitle(labelS);
     return pieChart;
 }

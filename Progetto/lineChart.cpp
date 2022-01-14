@@ -20,11 +20,12 @@ QChart* LineChart::showChart(){
     for(int i=0;i<nPoints;i++){
         s->append(i+1,d.at(i).getData());
     }
-    QChart* c=new QChart();
+    QChart* lineChart=new QChart();
     QString t="";
-    c->legend()->hide();
-    c->addSeries(s);
-    c->createDefaultAxes();
-    c->setTitle(t.fromStdString(data.getTitle()));
-    return c;
+    lineChart->legend()->hide();
+    lineChart->addSeries(s);
+    lineChart->createDefaultAxes();
+    lineChart->setAnimationOptions(QChart::SeriesAnimations);
+    lineChart->setTitle(t.fromStdString(data.getTitle()));
+    return lineChart;
 }
