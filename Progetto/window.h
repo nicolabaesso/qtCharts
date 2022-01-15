@@ -16,6 +16,7 @@
 #include <QChartView>
 #include <QDialogButtonBox>
 #include <QPushButton>
+#include <QLineEdit>
 #include "chart.h"
 #include "lineChart.h"
 #include "pieChart.h"
@@ -31,8 +32,8 @@ class Window: public QWidget{
 private:
     Controller* controller;
 
-    vector<QPlainTextEdit> labelVector;
-    vector<QPlainTextEdit> dataVector;
+    vector<QLineEdit*> labelVector;
+    vector<QLineEdit*> dataVector;
     QMenu* file;
     QMenu* chart;
     QPlainTextEdit* fileName;
@@ -41,6 +42,7 @@ private:
     QGridLayout* dataL;
     QGridLayout* dialogLayout;
     QPushButton* addDataButton;
+    QPushButton* saveDataButton;
     QPushButton* newFileButton;
     QPushButton* openFileButton;
     QPushButton* saveFileButton;
@@ -49,6 +51,8 @@ private:
     QPushButton* loadPieChartButton;
     QPushButton* confirmNewFileButton;
     QDialog* newFileDialog;
+    QLineEdit* labelEdit;
+    QLineEdit* dataEdit;
 
     int rowGridLayoutData;
     int columnGridLayoutData;
@@ -60,7 +64,7 @@ private:
 
     void initToolBar(QHBoxLayout *mainLayout);
 
-   // void initVectors(DataHandler readedData);
+    void initVectors(DataHandler* readedData);
 public:
     Window(QWidget *parent=nullptr);
     void showWarning(const QString& message);

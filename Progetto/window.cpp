@@ -76,10 +76,15 @@ void Window::initDataLayout(QHBoxLayout* mainLayout){
     QLabel* label=new QLabel("Label",datas);
     QLabel* value=new QLabel("Value",datas);
     addDataButton=new QPushButton(this);
-    addDataButton->setText("Add data");
-    datas->setMinimumSize(480,640);
+    addDataButton->setText("Aggiungi dati");
+    saveDataButton=new QPushButton(this);
+    saveDataButton->setText("Salva dati");
     datas->setLayout(dataL);
     dataL->addWidget(addDataButton,rowGridLayoutData,1);
+    dataL->addWidget(saveDataButton,rowGridLayoutData,2);
+    id->resize(50,50);
+    label->resize(50,50);
+    value->resize(50,50);
     rowGridLayoutData++;
     dataL->addWidget(id,rowGridLayoutData,columnGridLayoutData);
     columnGridLayoutData++;
@@ -87,14 +92,14 @@ void Window::initDataLayout(QHBoxLayout* mainLayout){
     columnGridLayoutData++;
     dataL->addWidget(value,rowGridLayoutData,columnGridLayoutData);
     columnGridLayoutData=0;
+    rowGridLayoutData++;
     mainLayout->addWidget(datas);
 }
 
 void Window::initDataValues(DataHandler readedData){
-    //initVectors(readedData);
+    initVectors(&readedData);
     QLabel* id;
-    //QPlainTextEdit* labelEdit=new QPlainTextEdit;
-    //QPlainTextEdit* dataEdit=new QPlainTextEdit;
+
     int size=readedData.getDataOnFile().size();
     QString pos="";
     QString lab="";
@@ -103,35 +108,34 @@ void Window::initDataValues(DataHandler readedData){
         string p=std::to_string(i);
         id=new QLabel(pos.fromStdString(p));
         dataL->addWidget(id,rowGridLayoutData,columnGridLayoutData);
-        //columnGridLayoutData++;
+        columnGridLayoutData++;
+        labelEdit=new QLineEdit;
         lab=lab.fromStdString(readedData.getDataOnFile().at(i).getLabel());
-        //labelEdit->setPlainText(lab);
-        //labelVector.push_back(*labelEdit);
-        //dataL->addWidget(&labelVector.at(i),rowGridLayoutData,columnGridLayoutData);
-        //columnGridLayoutData++;
+        labelEdit->setText(lab);
+        labelVector.at(i)=labelEdit;
+        dataL->addWidget(labelVector.at(i),rowGridLayoutData,columnGridLayoutData);
+        columnGridLayoutData++;
+        dataEdit=new QLineEdit;
         data=data.number(readedData.getDataOnFile().at(i).getData());
-        //dataEdit->setPlainText(data);
-        //dataVector.push_back(*dataEdit);
-        //dataL->addWidget(&dataVector.at(i),rowGridLayoutData,columnGridLayoutData);
+        dataEdit->setText(data);
+        dataVector.at(i)=dataEdit;
+        dataL->addWidget(dataVector.at(i),rowGridLayoutData,columnGridLayoutData);
         rowGridLayoutData++;
-        //columnGridLayoutData=0;
+        columnGridLayoutData=0;
     }
 }
-/*
-void Window::initVectors(DataHandler readedData){
-    QPlainTextEdit* label=new QPlainTextEdit;
-    QPlainTextEdit* data=new QPlainTextEdit;
-    for(unsigned int i=0;i<readedData.getDataOnFile().size();i++){
-        labelVector.push_back(*label);
-        dataVector.push_back(*data);
+
+void Window::initVectors(DataHandler* readedData){
+    for(unsigned int i=0;i<readedData->getDataOnFile().size();i++){
+        labelVector.push_back(new QLineEdit);
+        dataVector.push_back(new QLineEdit);
     }
-}*/
+}
 
 void Window::initChartLayout(QHBoxLayout* mainLayout){
     chartL=new QGridLayout;
     QFrame* charts=new QFrame;
     charts->setLayout(chartL);
-    charts->setMinimumSize(640,480);
     mainLayout->addWidget(charts);
 }
 

@@ -50,11 +50,13 @@ void FileHandler::initExampleFile(){
     QDomElement root=example.createElement("Title");
     root.setAttribute("Name","Dati d'esempio");
     example.appendChild(root);
+    int j;
     for(int i=0;i<5;i++){
+        j=i+1;
         QDomElement data=example.createElement("Data");
         data.setAttribute("ID",QString::number(i));
         data.setAttribute("Label","Default");
-        data.setAttribute("Data",i);
+        data.setAttribute("Data",j);
         root.appendChild(data);
     }
     QFile ex("./example.xml");
