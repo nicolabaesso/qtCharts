@@ -68,23 +68,28 @@ void Window::initToolBar(QHBoxLayout* mainLayout){
 }
 
 void Window::initDataLayout(QHBoxLayout* mainLayout){
+    dataFrame=new QFrame;
+    initDataFrame(dataFrame);
+    mainLayout->addWidget(dataFrame);
+}
+
+void Window::initDataFrame(QFrame* dataFrame){
     rowGridLayoutData=0;
     columnGridLayoutData=0;
     dataL=new QGridLayout;
-    QFrame* datas=new QFrame;
-    QLabel* id=new QLabel("Id",datas);
-    QLabel* label=new QLabel("Label",datas);
-    QLabel* value=new QLabel("Value",datas);
+    QLabel* id=new QLabel("Id",dataFrame);
+    QLabel* label=new QLabel("Label",dataFrame);
+    QLabel* value=new QLabel("Value",dataFrame);
     addDataButton=new QPushButton(this);
     addDataButton->setText("Aggiungi dati");
     saveDataButton=new QPushButton(this);
     saveDataButton->setText("Salva dati");
-    datas->setLayout(dataL);
-    dataL->addWidget(addDataButton,rowGridLayoutData,1);
-    dataL->addWidget(saveDataButton,rowGridLayoutData,2);
+    dataFrame->setLayout(dataL);
     id->resize(50,50);
     label->resize(50,50);
     value->resize(50,50);
+    dataL->addWidget(addDataButton,rowGridLayoutData,1);
+    dataL->addWidget(saveDataButton,rowGridLayoutData,2);
     rowGridLayoutData++;
     dataL->addWidget(id,rowGridLayoutData,columnGridLayoutData);
     columnGridLayoutData++;
@@ -93,21 +98,18 @@ void Window::initDataLayout(QHBoxLayout* mainLayout){
     dataL->addWidget(value,rowGridLayoutData,columnGridLayoutData);
     columnGridLayoutData=0;
     rowGridLayoutData++;
-    mainLayout->addWidget(datas);
 }
 
-void Window::initDataValues(DataHandler readedData){
+void Window::initExampleValues(DataHandler readedData){
     initVectors(&readedData);
-    QLabel* id;
-
     int size=readedData.getDataOnFile().size();
     QString pos="";
     QString lab="";
     QString data="";
     for(int i=0;i<size;i++){
         string p=std::to_string(i);
-        id=new QLabel(pos.fromStdString(p));
-        dataL->addWidget(id,rowGridLayoutData,columnGridLayoutData);
+        idData=new QLabel(pos.fromStdString(p));
+        dataL->addWidget(idData,rowGridLayoutData,columnGridLayoutData);
         columnGridLayoutData++;
         labelEdit=new QLineEdit;
         lab=lab.fromStdString(readedData.getDataOnFile().at(i).getLabel());
@@ -123,6 +125,40 @@ void Window::initDataValues(DataHandler readedData){
         rowGridLayoutData++;
         columnGridLayoutData=0;
     }
+}
+
+void Window::initDataValues(DataHandler readedData){
+    initVectors(&readedData);
+    initDataFrame(dataFrame);
+    int size=readedData.getDataOnFile().size();
+    QString pos="";
+    QString lab="";
+    QString data="";
+    for(int i=0;i<size;i++){
+        string p=std::to_string(i);
+        idData=new QLabel(pos.fromStdString(p));
+        dataL->addWidget(idData,rowGridLayoutData,columnGridLayoutData);
+        columnGridLayoutData++;
+        labelEdit=new QLineEdit;
+        lab=lab.fromStdString(readedData.getDataOnFile().at(i).getLabel());
+        labelEdit->setText(lab);
+        labelVector.at(i)=labelEdit;
+        dataL->addWidget(labelVector.at(i),rowGridLayoutData,columnGridLayoutData);
+        columnGridLayoutData++;
+        dataEdit=new QLineEdit;
+        data=data.number(readedData.getDataOnFile().at(i).getData());
+        dataEdit->setText(data);
+        dataVector.at(i)=dataEdit;
+        dataL->addWidget(dataVector.at(i),rowGridLayoutData,columnGridLayoutData);
+        rowGridLayoutData++;
+        columnGridLayoutData=0;
+    }
+}
+
+void Window::removeDataValues(){
+    labelVector.clear();
+    dataVector.clear();
+    delete dataL;
 }
 
 void Window::initVectors(DataHandler* readedData){
@@ -210,16 +246,26 @@ void Window::closeNewFileDialog(){
     delete newFileDialog;
 }
 
+void Window::closeWarning(){
+    warningDialog->close();
+    delete warningDialog;
+}
+
 void Window::showWarning(const QString& message){
-    QDialog* dialog=new QDialog(this);
-    dialog->setLayout(new QHBoxLayout);
-    dialog->layout()->addWidget(new QLabel(message,dialog));
-    dialog->layout()->setAlignment(Qt::AlignCenter);
-    dialog->setMinimumWidth(120);
-    dialog->setMaximumWidth(480);
-    dialog->setMinimumHeight(120);
-    dialog->setMaximumHeight(480);
-    dialog->show();
+    warningDialog=new QDialog(this);
+    exitWarningButton=new QPushButton(this);
+    warningDialog->setLayout(new QVBoxLayout);
+    exitWarningButton->setText("Ok");
+    warningDialog->layout()->addWidget(new QLabel(message,warningDialog));
+    warningDialog->layout()->addWidget(new QLabel("",warningDialog));
+    warningDialog->layout()->addWidget(exitWarningButton);
+    warningDialog->layout()->setAlignment(Qt::AlignCenter);
+    warningDialog->setMinimumWidth(120);
+    warningDialog->setMaximumWidth(480);
+    warningDialog->setMinimumHeight(120);
+    warningDialog->setMaximumHeight(480);
+    warningDialog->show();
+    connect(exitWarningButton, SIGNAL(clicked()), this, SLOT(closeWarning()));
 }
 
 QString Window::showSaveDialog(){

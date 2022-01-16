@@ -5,6 +5,7 @@
 \usepackage{graphicx,gb4e,qtree,latexsym,tree-dvips,times,tipa,stmaryrd}
 \usepackage[normalem]{ulem}
 \usepackage[]{natbib}
+\usepackage{hyperref}
 
 
 \newcommand{\denplain}[1]{$\llbracket$#1$\rrbracket$} 
@@ -70,11 +71,19 @@
     
     15/01/2022 (2 ore): proseguo modifica window. Da fare: connettere con controller (e model di conseguenza)
     
+    16/01/2022 (1 ora): cambio di layout ad apertura di un nuovo file. Da fare: vedi 15/01/2022 e implementare anche nella creazone di un file
+    
     \newpage
     \tableofcontents
     \newpage
     \section{Introduzione}
      Questo progetto riguarda un applicativo C++ per la visione di dati sotto forma di grafici, fruibile tramite GUI grazie all' utilizzo del framework Qt.
+    \subsection{Strumenti di sviluppo utilizzati}
+    Questo progetto è stato scritto utilizzando l'IDE QtCreator alla versione 5.0.3, ed è stato utilizzata la versione 5.9.5 del framework Qt. 
+    La seguente relazione è stata create tramite LaTex utilizzando TexStudio.
+    Il codice è stato scritto e testato in Windows 10 (versione 21H1) e in Debian 11 Bullseye.
+    Il codice è stato versionato tramite Git ed è anche disponibile (sotto il nome di QtCharts) a \href{https://github.com/nicolabaesso/qtCharts}{questo indirizzo}.
+    \subsection{Compilazione ed esecuzione in sistemi Linux}
     \section{Funzionamento dell'applicazione}
     \subsection{Avvio e schermata iniziale}
     All'avvio, l'applicazione genera un file di esempio, contenente 5 valori, al fine di mostrare sin dal principio le funzionalità presenti.
@@ -82,10 +91,13 @@
     \section{Tempistiche(Ore di lavoro)}
     \section{Caratteristiche tecniche}
     \subsection{URL e classi coinvolte}
+    \subsubsection{Classe Data}
+    La classe data rappresenta un dato letto da file, o generato automaticamente all' avvio (si veda la sezioone "Avvio e schermata iniziale" per maggiori dettagli).
+    Tale classe è composta da una stringa, che rappresenta una breve descrizione del dato, e un valore numerico di tipo double, che rappresenta il valore del dato.
     \subsection{Gerarchie di tipi}
     \subsection{Chiamate polimorfe}
     \subsection{Formato di file usato per I/O di file}
-    Per questo progetto ho scelto di utilizzare il formato XML per la memorizzazione dei dati in file. Sebbene sia un formato "vecchio", permette una gestione più ordinata delle informazioni e permette di vedere le informazioni da un qualunque editor di testo.
+    Per questo progetto si è scelto di utilizzare il formato XML per la memorizzazione dei dati in file. Sebbene sia un formato "vecchio", permette una gestione più ordinata delle informazioni e permette di visualizzarle da un qualunque editor di testo.
     Per questo motivo, i file letti devono obbligatoriamente avere la seguente formattazione: <inserire formattazione qui>
 	% That's it!
 	

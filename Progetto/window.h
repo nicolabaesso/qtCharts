@@ -50,9 +50,13 @@ private:
     QPushButton* loadLineChartButton;
     QPushButton* loadPieChartButton;
     QPushButton* confirmNewFileButton;
+    QPushButton* exitWarningButton;
     QDialog* newFileDialog;
+    QDialog* warningDialog;
     QLineEdit* labelEdit;
     QLineEdit* dataEdit;
+    QLabel* idData;
+    QFrame* dataFrame;
 
     int rowGridLayoutData;
     int columnGridLayoutData;
@@ -65,6 +69,9 @@ private:
     void initToolBar(QHBoxLayout *mainLayout);
 
     void initVectors(DataHandler* readedData);
+    void removeFromLayout(int row, int column);
+    void initDataFrame(QFrame* dataFrame);
+
 public:
     Window(QWidget *parent=nullptr);
     void showWarning(const QString& message);
@@ -79,5 +86,9 @@ public:
     void deletePreviousChart();
     QString getNewFileName();
     void closeNewFileDialog();
+    void removeDataValues();
+    void initExampleValues(DataHandler readedData);
+private slots:
+    void closeWarning();
 };
 #endif // WINDOW_H
