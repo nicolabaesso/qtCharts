@@ -10,8 +10,12 @@ DataHandler& Model::readFile(QString path){
     return file.readFromFile(path);
 }
 
-void Model::saveFile(QString path){
-    file.saveFile(path);
+void Model::saveFile(){
+    file.saveFile();
+}
+
+void Model::saveNewFile(QString path){
+    file.saveNewFile(path);
 }
 
 DataHandler& Model::getData(){

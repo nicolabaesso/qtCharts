@@ -1,7 +1,6 @@
 #include "window.h"
 #include "controller.h"
 
-
 Window::Window(QWidget *parent):QWidget(parent){
     QVBoxLayout* mainLayout = new QVBoxLayout;
     QHBoxLayout* menuLayout=new QHBoxLayout;
@@ -22,13 +21,6 @@ Window::Window(QWidget *parent):QWidget(parent){
     resize(QSize(1280,720));
 }
 
-QString Window::getNewFileName(){
-    if(fileName==nullptr){
-        return "Il mio grafico";
-    }
-    return fileName->toPlainText();
-}
-
 void Window::initMenu(QHBoxLayout* mainLayout){
     QMenuBar* menuBar = new QMenuBar(this);
     file = new QMenu("File",menuBar);
@@ -36,11 +28,12 @@ void Window::initMenu(QHBoxLayout* mainLayout){
     file->addAction(new QAction("Nuovo",file));
     file->addAction(new QAction("Apri",file));
     file->addAction(new QAction("Salva",file));
+    file->addAction(new QAction("Salva con nome",file));
     file->addAction(new QAction("Chiudi",file));
     chart->addAction(new QAction("Mostra Istogramma",chart));
     chart->addAction(new QAction("Mostra Diagramma Cartesiano",chart));
     chart->addAction(new QAction("Mostra Areogramma (a torta)",chart));
-    connect(file->actions().at(3),SIGNAL(triggered()),this,SLOT(close()));
+
     menuBar->addMenu(file);
     menuBar->addMenu(chart);
     mainLayout->addWidget(menuBar);
@@ -50,18 +43,21 @@ void Window::initToolBar(QHBoxLayout* mainLayout){
     newFileButton=new QPushButton(this);
     openFileButton=new QPushButton(this);
     saveFileButton=new QPushButton(this);
+    saveNewFileButton=new QPushButton(this);
     loadBarChartButton=new QPushButton(this);
     loadLineChartButton=new QPushButton(this);
     loadPieChartButton=new QPushButton(this);
     newFileButton->setText("Nuovo File");
     openFileButton->setText("Apri File");
     saveFileButton->setText("Salva File");
+    saveNewFileButton->setText("Salva File con nome");
     loadBarChartButton->setText("Mostra Istogramma");
     loadLineChartButton->setText("Mostra Diagramma Cartesiano");
     loadPieChartButton->setText("Mostra Areogramma a torta");
     mainLayout->addWidget(newFileButton);
     mainLayout->addWidget(openFileButton);
     mainLayout->addWidget(saveFileButton);
+    mainLayout->addWidget(saveNewFileButton);
     mainLayout->addWidget(loadBarChartButton);
     mainLayout->addWidget(loadLineChartButton);
     mainLayout->addWidget(loadPieChartButton);
@@ -77,27 +73,31 @@ void Window::initDataFrame(QFrame* dataFrame){
     rowGridLayoutData=0;
     columnGridLayoutData=0;
     dataL=new QGridLayout;
-    QLabel* id=new QLabel("Id",dataFrame);
-    QLabel* label=new QLabel("Label",dataFrame);
-    QLabel* value=new QLabel("Value",dataFrame);
+    idInit=new QLabel("Id",dataFrame);
+    labelInit=new QLabel("Etichetta",dataFrame);
+    valueInit=new QLabel("Valore",dataFrame);
     addDataButton=new QPushButton(this);
     addDataButton->setText("Aggiungi dati");
     saveDataButton=new QPushButton(this);
     saveDataButton->setText("Salva dati");
+    deleteDataButton=new QPushButton(this);
+    deleteDataButton->setText("Elimina dati");
     dataFrame->setLayout(dataL);
-    id->resize(50,50);
-    label->resize(50,50);
-    value->resize(50,50);
-    dataL->addWidget(addDataButton,rowGridLayoutData,1);
-    dataL->addWidget(saveDataButton,rowGridLayoutData,2);
+    idInit->resize(50,50);
+    labelInit->resize(50,50);
+    valueInit->resize(50,50);
+    dataL->addWidget(addDataButton,rowGridLayoutData,0);
+    dataL->addWidget(saveDataButton,rowGridLayoutData,1);
+    dataL->addWidget(deleteDataButton,rowGridLayoutData,2);
     rowGridLayoutData++;
-    dataL->addWidget(id,rowGridLayoutData,columnGridLayoutData);
+    dataL->addWidget(idInit,rowGridLayoutData,columnGridLayoutData);
     columnGridLayoutData++;
-    dataL->addWidget(label,rowGridLayoutData,columnGridLayoutData);
+    dataL->addWidget(labelInit,rowGridLayoutData,columnGridLayoutData);
     columnGridLayoutData++;
-    dataL->addWidget(value,rowGridLayoutData,columnGridLayoutData);
+    dataL->addWidget(valueInit,rowGridLayoutData,columnGridLayoutData);
     columnGridLayoutData=0;
     rowGridLayoutData++;
+
 }
 
 void Window::initExampleValues(DataHandler readedData){
@@ -108,19 +108,18 @@ void Window::initExampleValues(DataHandler readedData){
     QString data="";
     for(int i=0;i<size;i++){
         string p=std::to_string(i);
-        idData=new QLabel(pos.fromStdString(p));
-        dataL->addWidget(idData,rowGridLayoutData,columnGridLayoutData);
+        pos=pos.fromStdString(p);
+        idVector.at(i)=new QLabel(pos);
+        dataL->addWidget(idVector.at(i),rowGridLayoutData,columnGridLayoutData);
         columnGridLayoutData++;
-        labelEdit=new QLineEdit;
         lab=lab.fromStdString(readedData.getDataOnFile().at(i).getLabel());
-        labelEdit->setText(lab);
-        labelVector.at(i)=labelEdit;
+        labelVector.at(i)=new QLineEdit;
+        labelVector.at(i)->setText(lab);
         dataL->addWidget(labelVector.at(i),rowGridLayoutData,columnGridLayoutData);
         columnGridLayoutData++;
-        dataEdit=new QLineEdit;
         data=data.number(readedData.getDataOnFile().at(i).getData());
-        dataEdit->setText(data);
-        dataVector.at(i)=dataEdit;
+        dataVector.at(i)=new QLineEdit;
+        dataVector.at(i)->setText(data);
         dataL->addWidget(dataVector.at(i),rowGridLayoutData,columnGridLayoutData);
         rowGridLayoutData++;
         columnGridLayoutData=0;
@@ -130,39 +129,34 @@ void Window::initExampleValues(DataHandler readedData){
 void Window::initDataValues(DataHandler readedData){
     initVectors(&readedData);
     initDataFrame(dataFrame);
+    setDataConnect();
     int size=readedData.getDataOnFile().size();
     QString pos="";
     QString lab="";
     QString data="";
     for(int i=0;i<size;i++){
         string p=std::to_string(i);
-        idData=new QLabel(pos.fromStdString(p));
-        dataL->addWidget(idData,rowGridLayoutData,columnGridLayoutData);
+        pos=pos.fromStdString(p);
+        idVector.at(i)=new QLabel(pos);
+        dataL->addWidget(idVector.at(i),rowGridLayoutData,columnGridLayoutData);
         columnGridLayoutData++;
-        labelEdit=new QLineEdit;
         lab=lab.fromStdString(readedData.getDataOnFile().at(i).getLabel());
-        labelEdit->setText(lab);
-        labelVector.at(i)=labelEdit;
+        labelVector.at(i)=new QLineEdit;
+        labelVector.at(i)->setText(lab);
         dataL->addWidget(labelVector.at(i),rowGridLayoutData,columnGridLayoutData);
         columnGridLayoutData++;
-        dataEdit=new QLineEdit;
         data=data.number(readedData.getDataOnFile().at(i).getData());
-        dataEdit->setText(data);
-        dataVector.at(i)=dataEdit;
+        dataVector.at(i)=new QLineEdit;
+        dataVector.at(i)->setText(data);
         dataL->addWidget(dataVector.at(i),rowGridLayoutData,columnGridLayoutData);
         rowGridLayoutData++;
         columnGridLayoutData=0;
     }
 }
 
-void Window::removeDataValues(){
-    labelVector.clear();
-    dataVector.clear();
-    delete dataL;
-}
-
 void Window::initVectors(DataHandler* readedData){
     for(unsigned int i=0;i<readedData->getDataOnFile().size();i++){
+        idVector.push_back(new QLabel);
         labelVector.push_back(new QLineEdit);
         dataVector.push_back(new QLineEdit);
     }
@@ -175,25 +169,65 @@ void Window::initChartLayout(QHBoxLayout* mainLayout){
     mainLayout->addWidget(charts);
 }
 
+void Window::removeDataValues(){
+    QLayoutItem* child;
+    columnGridLayoutData=2;
+    while(rowGridLayoutData != -1){
+        child=dataFrame->layout()->takeAt(rowGridLayoutData+columnGridLayoutData);
+        delete child;
+        if(columnGridLayoutData==0){
+            columnGridLayoutData=2;
+            rowGridLayoutData--;
+        }
+        else{
+            columnGridLayoutData--;
+        }
+    }
+    columnGridLayoutData=0;
+    delete dataFrame->layout();
+    idVector.clear();
+    labelVector.clear();
+    dataVector.clear();
+}
+
+
+
+void Window::deletePreviousChart(){
+    chartL->removeWidget(chartViewer);
+    delete chartViewer;
+}
+
+QString Window::getNewFileName(){
+    if(fileName==nullptr){
+        return "Il mio grafico";
+    }
+    return fileName->toPlainText();
+}
+
 void Window::setController(Controller* c){
     controller=c;
     connect(file->actions().at(0), SIGNAL(triggered()), controller, SLOT(newFile()));
     connect(file->actions().at(1), SIGNAL(triggered()), controller, SLOT(openFile()));
     connect(file->actions().at(2),  SIGNAL(triggered()), controller, SLOT(saveFile()));
+    connect(file->actions().at(3), SIGNAL(triggered()), controller, SLOT(saveNewFile()));
+    connect(file->actions().at(4), SIGNAL(triggered()), this, SLOT(close()));
     connect(chart->actions().at(0),  SIGNAL(triggered()), controller, SLOT(loadBarChart()));
     connect(chart->actions().at(1),  SIGNAL(triggered()), controller, SLOT(loadLineChart()));
     connect(chart->actions().at(2),  SIGNAL(triggered()), controller, SLOT(loadPieChart()));
     connect(newFileButton, SIGNAL(clicked()), controller, SLOT(newFile()));
     connect(openFileButton, SIGNAL(clicked()), controller, SLOT(openFile()));
     connect(saveFileButton, SIGNAL(clicked()), controller, SLOT(saveFile()));
+    connect(saveNewFileButton, SIGNAL(clicked()), controller, SLOT(saveFile()));
     connect(loadBarChartButton, SIGNAL(clicked()), controller, SLOT(loadBarChart()));
     connect(loadLineChartButton, SIGNAL(clicked()), controller, SLOT(loadLineChart()));
     connect(loadPieChartButton, SIGNAL(clicked()), controller, SLOT(loadPieChart()));
+    setDataConnect();
 }
 
-void Window::deletePreviousChart(){
-    chartL->removeWidget(chartViewer);
-    delete chartViewer;
+void Window::setDataConnect(){
+    //connect(addDataButton, SIGNAL(clicked()), controller, SLOT(newFile()));
+    connect(saveDataButton, SIGNAL(clicked()), controller, SLOT(saveFile()));
+    //connect(deleteDataButton, SIGNAL(clicked()), controller, SLOT(newFile()));
 }
 
 void Window::createChart(Chart* c){

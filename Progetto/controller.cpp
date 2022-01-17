@@ -13,6 +13,10 @@ void Controller::loadExampleFile(){
     view->createChart(exampleChart);
 }
 
+void Controller::editData(){
+
+}
+
 void Controller::setView(Window* newView){
     view = newView;
 }
@@ -32,7 +36,7 @@ void Controller::manageNewFile(){
             throw std::runtime_error("Error while saving: file not created.");
         }
         model->setData(newFileData);
-        model->saveFile(path);
+        model->saveNewFile(path);
         DataHandler readedData=model->readFile(path);
         view->deletePreviousChart();
         LineChart* newLineChart=new LineChart(readedData);
@@ -63,13 +67,23 @@ void Controller::openFile(){
     }
 }
 
-void Controller::saveFile(){
+void Controller::saveNewFile(){
     try{
         QString path=view->showSaveDialog();
         if(path == nullptr){
             throw std::runtime_error("Error: file not saved. Not a correct path.");
         }
-        model->saveFile(path);
+        model->saveNewFile(path);
+        view->showWarning("File successfully saved!");
+    }
+    catch(std::runtime_error exc){
+        view->showWarning(exc.what());
+    }
+}
+
+void Controller::saveFile(){
+    try{
+        model->saveFile();
         view->showWarning("File successfully saved!");
     }
     catch(std::runtime_error exc){

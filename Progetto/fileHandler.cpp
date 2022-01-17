@@ -31,6 +31,7 @@ DataHandler& FileHandler::readFromFile(QString path){
                     readedData.insertData(d);
                 }
             }
+            setFileName(path);
             qDebug()<<"File succesfully readed!";
         }
     }
@@ -43,6 +44,14 @@ DataHandler& FileHandler::getReadedData(){
 
 void FileHandler::setReadedData(const DataHandler& newReadedData){
     readedData = newReadedData;
+}
+
+const QString& FileHandler::getFileName() const{
+    return fileName;
+}
+
+void FileHandler::setFileName(const QString& newFileName){
+    fileName = newFileName;
 }
 
 void FileHandler::initExampleFile(){
@@ -65,8 +74,8 @@ void FileHandler::initExampleFile(){
     stream<<example.toString();
     ex.close();
 }
-void FileHandler::saveFile(QString path){
-    if(path == nullptr){
+void FileHandler::saveFile(){
+    if(fileName == nullptr){
         qDebug()<<"Cannot save file: no valid path";
         return;
     }
@@ -82,11 +91,20 @@ void FileHandler::saveFile(QString path){
         data.setAttribute("Data",sd.getData());
         root.appendChild(data);
     }
-    QFile s(path);
+    QFile s(fileName);
     s.open(QIODevice::WriteOnly);
     QTextStream stream(&s);
     stream<<save.toString();
     s.close();
+}
+void FileHandler::saveNewFile(QString path){
+    if(path == nullptr){
+        qDebug()<<"Cannot save file: no valid path";
+    }
+    else{
+        setFileName(path);
+        saveFile();
+    }
 }
 FileHandler::~FileHandler(){
     //delete this;

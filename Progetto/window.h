@@ -32,6 +32,7 @@ class Window: public QWidget{
 private:
     Controller* controller;
 
+    vector<QLabel*> idVector;
     vector<QLineEdit*> labelVector;
     vector<QLineEdit*> dataVector;
     QMenu* file;
@@ -43,9 +44,11 @@ private:
     QGridLayout* dialogLayout;
     QPushButton* addDataButton;
     QPushButton* saveDataButton;
+    QPushButton* deleteDataButton;
     QPushButton* newFileButton;
     QPushButton* openFileButton;
     QPushButton* saveFileButton;
+    QPushButton* saveNewFileButton;
     QPushButton* loadBarChartButton;
     QPushButton* loadLineChartButton;
     QPushButton* loadPieChartButton;
@@ -53,10 +56,11 @@ private:
     QPushButton* exitWarningButton;
     QDialog* newFileDialog;
     QDialog* warningDialog;
-    QLineEdit* labelEdit;
-    QLineEdit* dataEdit;
     QLabel* idData;
     QFrame* dataFrame;
+    QLabel* idInit;
+    QLabel* labelInit;
+    QLabel* valueInit;
 
     int rowGridLayoutData;
     int columnGridLayoutData;
@@ -72,6 +76,7 @@ private:
     void removeFromLayout(int row, int column);
     void initDataFrame(QFrame* dataFrame);
 
+    void setDataConnect();
 public:
     Window(QWidget *parent=nullptr);
     void showWarning(const QString& message);

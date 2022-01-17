@@ -8,10 +8,11 @@ private:
 public:
     Model();
     DataHandler& readFile(QString path="./example.xml");
-    void saveFile(QString path);
+    void saveFile();
     DataHandler& getData();
     DataHandler& readExampleFile(QString path="./example.xml");
     void setData(DataHandler d);
+    void saveNewFile(QString path);
 };
 
 #endif // MODEL_H

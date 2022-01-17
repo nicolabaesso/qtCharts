@@ -18,8 +18,8 @@ public:
 public slots:
     /*
     void showChart();
-    void changeChart();
-    void editData();*/
+    void changeChart();*/
+    void editData();
     void newFile();
     void manageNewFile();
     void openFile();
@@ -27,6 +27,7 @@ public slots:
     void loadLineChart();
     void loadPieChart();
     void loadBarChart();
+    void saveNewFile();
 };
 
 

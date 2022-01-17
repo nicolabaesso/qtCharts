@@ -18,7 +18,7 @@ QChart* BarChart::showChart(){
     QChart* barChart=new QChart();
     barChart->addSeries(series);
     QValueAxis* axisY = new QValueAxis();
-    axisY->setRange(data.getMinData(),data.getMaxData());
+    axisY->setRange(data.getMinData()?data.getMinData():0,data.getMaxData()?data.getMaxData():1);
     barChart->addAxis(axisY, Qt::AlignLeft);
     series->attachAxis(axisY);
     barChart->setTitle(t.fromStdString(data.getTitle()));
