@@ -14,23 +14,54 @@ void Controller::loadExampleFile(){
     DataHandler exampleData=model->readExampleFile("./example.xml");
     view->initExampleValues(exampleData);
     LineChart* exampleChart=new LineChart(exampleData);
-    view->createChart(exampleChart);
+    view->setActiveChart(exampleChart);
+    view->createChart();
 }
 
 void Controller::deleteData(){
-    qDebug()<<"Deleting data";
     int id=view->getDeleteDataComboBoxValue().toInt();
     view->closeDeleteDialog();
     model->deleteData(id);
-    //view->removeDeletedElement(id);
     model->saveFile();
     view->removeDataValues();
     view->initDataValues(model->getData());
+    Chart* chart=view->getActiveChart();
+    bool identifiedChart=false;
+    if(dynamic_cast<LineChart*>(chart)){
+        loadLineChart();
+        identifiedChart=true;
+    }
+    if(!identifiedChart && dynamic_cast<BarChart*>(chart)){
+        loadBarChart();
+        identifiedChart=true;
+    }
+    if(!identifiedChart && dynamic_cast<PieChart*>(chart)){
+        loadPieChart();
+    }
     view->showWarning("Dato eliminato con successo!");
 }
 
 void Controller::addData(){
-    qDebug()<<"Adding data";
+    DataHandler dataWithNew=model->getData();
+    dataWithNew.insertData(Data());
+    model->setData(dataWithNew);
+    model->saveFile();
+    view->removeDataValues();
+    view->initDataValues(model->getData());
+    Chart* chart=view->getActiveChart();
+    bool identifiedChart=false;
+    if(dynamic_cast<LineChart*>(chart)){
+        loadLineChart();
+        identifiedChart=true;
+    }
+    if(!identifiedChart && dynamic_cast<BarChart*>(chart)){
+        loadBarChart();
+        identifiedChart=true;
+    }
+    if(!identifiedChart && dynamic_cast<PieChart*>(chart)){
+        loadPieChart();
+    }
+    view->showWarning("Dato aggiunto con successo!");
 }
 
 void Controller::saveData(){
@@ -48,6 +79,19 @@ void Controller::saveData(){
     }
     model->editData(dataToSave);
     model->saveFile();
+    Chart* chart=view->getActiveChart();
+    bool identifiedChart=false;
+    if(dynamic_cast<LineChart*>(chart)){
+        loadLineChart();
+        identifiedChart=true;
+    }
+    if(!identifiedChart && dynamic_cast<BarChart*>(chart)){
+        loadBarChart();
+        identifiedChart=true;
+    }
+    if(!identifiedChart && dynamic_cast<PieChart*>(chart)){
+        loadPieChart();
+    }
     view->showWarning("Dati aggiornati con successo!");
 }
 
@@ -70,7 +114,8 @@ void Controller::manageNewFile(){
         DataHandler readedData=model->readFile(path);
         view->deletePreviousChart();
         LineChart* newLineChart=new LineChart(readedData);
-        view->createChart(newLineChart);
+        view->setActiveChart(newLineChart);
+        view->createChart();
         view->showWarning("File successfully created!");
     }
     catch(std::runtime_error exc){
@@ -89,7 +134,8 @@ void Controller::openFile(){
         view->initDataValues(readedData);
         view->deletePreviousChart();
         LineChart* newLineChart=new LineChart(readedData);
-        view->createChart(newLineChart);
+        view->setActiveChart(newLineChart);
+        view->createChart();
         view->showWarning("File successfully opened!");
     }
     catch(std::runtime_error exc){
@@ -124,18 +170,21 @@ void Controller::saveFile(){
 void Controller::loadLineChart(){
     view->deletePreviousChart();
     LineChart* newLineChart=new LineChart(model->getData());
-    view->createChart(newLineChart);
+    view->setActiveChart(newLineChart);
+    view->createChart();
 }
 
 void Controller::loadPieChart(){
     view->deletePreviousChart();
     PieChart* newPieChart=new PieChart(model->getData());
-    view->createChart(newPieChart);
+    view->setActiveChart(newPieChart);
+    view->createChart();
 }
 
 void Controller::loadBarChart(){
     view->deletePreviousChart();
     BarChart* newBarChart=new BarChart(model->getData());
-    view->createChart(newBarChart);
+    view->setActiveChart(newBarChart);
+    view->createChart();
 }
 

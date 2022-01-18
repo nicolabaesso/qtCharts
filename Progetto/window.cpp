@@ -21,8 +21,6 @@ Window::Window(QWidget *parent):QWidget(parent){
     resize(QSize(1280,720));
 }
 
-
-
 void Window::initMenu(QHBoxLayout* mainLayout){
     QMenuBar* menuBar = new QMenuBar(this);
     file = new QMenu("File",menuBar);
@@ -85,9 +83,6 @@ void Window::initDataFrame(QFrame* dataFrame){
     deleteDataButton=new QPushButton(this);
     deleteDataButton->setText("Elimina dati");
     dataFrame->setLayout(dataL);
-    idInit->resize(50,50);
-    labelInit->resize(50,50);
-    valueInit->resize(50,50);
     dataL->addWidget(addDataButton,rowGridLayoutData,0);
     dataL->addWidget(saveDataButton,rowGridLayoutData,1);
     dataL->addWidget(deleteDataButton,rowGridLayoutData,2);
@@ -131,8 +126,9 @@ void Window::initExampleValues(DataHandler readedData){
 void Window::initDataValues(DataHandler readedData){
     initVectors(&readedData);
     dataFrame=new QFrame(this);
-    visualisationLayout->replaceWidget(oldDataFrame,dataFrame);
     initDataFrame(dataFrame);
+    visualisationLayout->replaceWidget(oldDataFrame,dataFrame);
+    delete oldDataFrame;
     setDataConnect();
     int size=readedData.getDataOnFile().size();
     QString pos="";
@@ -183,8 +179,10 @@ void Window::initDataId(){
 void Window::removeDataValues(){
     QLayoutItem* child;
     columnGridLayoutData=2;
-    while(rowGridLayoutData >= 0){
+    while(rowGridLayoutData >= 2){
+        dataFrame->layout()->itemAt(rowGridLayoutData+columnGridLayoutData)->widget()->hide();
         child=dataFrame->layout()->takeAt(rowGridLayoutData+columnGridLayoutData);
+        dataFrame->layout()->removeItem(child);
         delete child;
         if(columnGridLayoutData==0){
             columnGridLayoutData=2;
@@ -230,6 +228,14 @@ const vector<QLineEdit *>& Window::getDataVector() const{
     return dataVector;
 }
 
+Chart* Window::getActiveChart() const{
+    return activeChart;
+}
+
+void Window::setActiveChart(Chart *newActiveChart){
+    activeChart = newActiveChart;
+}
+
 void Window::setController(Controller* c){
     controller=c;
     connect(file->actions().at(0), SIGNAL(triggered()), controller, SLOT(newFile()));
@@ -256,43 +262,20 @@ void Window::setDataConnect(){
     connect(deleteDataButton, SIGNAL(clicked()), this, SLOT(deleteData()));
 }
 
-void Window::removeDeletedElement(int index){
-    QLabel* deletedId=idVector.at(index);
-    QLineEdit* deletedLabel=labelVector.at(index);
-    QLineEdit* deletedData=dataVector.at(index);
-    auto idIt=idVector.begin();
-    auto labelIt=labelVector.begin();
-    auto dataIt=dataVector.begin();
-    bool deleted=false;
-    while(!deleted){
-        if(*idIt==deletedId && *labelIt==deletedLabel && *dataIt==deletedData){
-            idVector.erase(idIt);
-            labelVector.erase(labelIt);
-            dataVector.erase(dataIt);
-            deleted=true;
-        }
-        else{
-            ++idIt;
-            ++labelIt;
-            ++dataIt;
-        }
-    }
-}
-
-void Window::createChart(Chart* c){
-    if(dynamic_cast<LineChart*>(c)){
-        static_cast<LineChart*>(c)->setData();
-        showChart(static_cast<LineChart*>(c)->showChart());
+void Window::createChart(){
+    if(dynamic_cast<LineChart*>(activeChart)){
+        static_cast<LineChart*>(activeChart)->setData();
+        showChart(static_cast<LineChart*>(activeChart)->showChart());
         return;
     }
-    if(dynamic_cast<BarChart*>(c)){
-        static_cast<BarChart*>(c)->setData();
-        showChart(static_cast<BarChart*>(c)->showChart());
+    if(dynamic_cast<BarChart*>(activeChart)){
+        static_cast<BarChart*>(activeChart)->setData();
+        showChart(static_cast<BarChart*>(activeChart)->showChart());
         return;
     }
-    if(dynamic_cast<PieChart*>(c)){
-        static_cast<PieChart*>(c)->setData();
-        showChart(static_cast<PieChart*>(c)->showChart());
+    if(dynamic_cast<PieChart*>(activeChart)){
+        static_cast<PieChart*>(activeChart)->setData();
+        showChart(static_cast<PieChart*>(activeChart)->showChart());
         return;
     }
 }

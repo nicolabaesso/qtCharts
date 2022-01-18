@@ -32,7 +32,7 @@ class Window: public QWidget{
   Q_OBJECT
 private:
     Controller* controller;
-
+    Chart* activeChart;
     vector<QLabel*> idVector;
     vector<QLineEdit*> labelVector;
     vector<QLineEdit*> dataVector;
@@ -93,24 +93,27 @@ public:
     void initDataValues(DataHandler readedData);
     void updateChart(DataHandler d);
     void showChart(QChart* c);
-    void createChart(Chart *c);
+    void createChart();
     void showNewFileDialog();
     void deletePreviousChart();
     QString getNewFileName() const;
     void closeNewFileDialog();
-    void closeDeleteDialog();
     void removeDataValues();
     void initExampleValues(DataHandler readedData);
     const vector<QLabel *> &getIdVector() const;
-
+    void closeDeleteDialog();
     const vector<QLineEdit *> &getLabelVector() const;
     const vector<QLineEdit *> &getDataVector() const;
     void showDeleteDataDialog();
     QString getDeleteDataComboBoxValue() const;
-    void removeDeletedElement(int index);
+    Chart *getChart() const;
+    void setActiveChart(Chart *newActiveChart);
+
+    Chart *getActiveChart() const;
 private slots:
     void closeWarning();
     void abortOperation();
     void deleteData();
+
 };
 #endif // WINDOW_H
