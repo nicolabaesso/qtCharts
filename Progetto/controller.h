@@ -15,11 +15,14 @@ public:
     void setModel(Model* newModel);
     void loadExampleFile();
 
+
 public slots:
     /*
     void showChart();
     void changeChart();*/
-    void editData();
+    void deleteData();
+    void addData();
+    void saveData();
     void newFile();
     void manageNewFile();
     void openFile();

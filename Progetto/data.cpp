@@ -19,3 +19,7 @@ Data& Data::operator=(const Data& d){
     data=d.data;
     return *this;
 }
+
+bool Data::operator==(const Data &d2){
+    return label==d2.label && data==d2.data;
+}

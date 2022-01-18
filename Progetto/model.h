@@ -13,6 +13,8 @@ public:
     DataHandler& readExampleFile(QString path="./example.xml");
     void setData(DataHandler d);
     void saveNewFile(QString path);
+    void editData(DataHandler dh);
+    void deleteData(int index);
 };
 
 #endif // MODEL_H

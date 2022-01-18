@@ -18,6 +18,9 @@ public:
     const QString &getFileName() const;
     void setFileName(const QString &newFileName);
     void saveNewFile(QString path);
+    void addData(Data d);
+    void editData(Data d, int index);
+    void deleteData(int index);
 };
 
 #endif // FILEHANDLER_H

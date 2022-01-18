@@ -6,6 +6,10 @@ void Controller::setModel(Model* newModel){
     model = newModel;
 }
 
+void Controller::setView(Window* newView){
+    view = newView;
+}
+
 void Controller::loadExampleFile(){
     DataHandler exampleData=model->readExampleFile("./example.xml");
     view->initExampleValues(exampleData);
@@ -13,12 +17,38 @@ void Controller::loadExampleFile(){
     view->createChart(exampleChart);
 }
 
-void Controller::editData(){
-
+void Controller::deleteData(){
+    qDebug()<<"Deleting data";
+    int id=view->getDeleteDataComboBoxValue().toInt();
+    view->closeDeleteDialog();
+    model->deleteData(id);
+    //view->removeDeletedElement(id);
+    model->saveFile();
+    view->removeDataValues();
+    view->initDataValues(model->getData());
+    view->showWarning("Dato eliminato con successo!");
 }
 
-void Controller::setView(Window* newView){
-    view = newView;
+void Controller::addData(){
+    qDebug()<<"Adding data";
+}
+
+void Controller::saveData(){
+    vector<QLineEdit*> labels=view->getLabelVector();
+    vector<QLineEdit*> datas=view->getDataVector();
+    DataHandler dataToSave;
+    Data singleDataToSave;
+    QString label, data;
+    for(unsigned int i=0;i<labels.size();i++){
+        label=labels.at(i)->text();
+        data=datas.at(i)->text();
+        singleDataToSave.setLabel(label.toStdString());
+        singleDataToSave.setData(data.toDouble());
+        dataToSave.insertData(singleDataToSave);
+    }
+    model->editData(dataToSave);
+    model->saveFile();
+    view->showWarning("Dati aggiornati con successo!");
 }
 
 void Controller::newFile(){
@@ -92,22 +122,20 @@ void Controller::saveFile(){
 }
 
 void Controller::loadLineChart(){
-    qDebug()<<"Loading line chart";
     view->deletePreviousChart();
     LineChart* newLineChart=new LineChart(model->getData());
     view->createChart(newLineChart);
 }
 
 void Controller::loadPieChart(){
-    qDebug()<<"Loading pie chart";
     view->deletePreviousChart();
     PieChart* newPieChart=new PieChart(model->getData());
     view->createChart(newPieChart);
 }
 
 void Controller::loadBarChart(){
-    qDebug()<<"Loading bar chart";
     view->deletePreviousChart();
     BarChart* newBarChart=new BarChart(model->getData());
     view->createChart(newBarChart);
 }
+

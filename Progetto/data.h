@@ -14,5 +14,6 @@ public:
     void setLabel(string l);
     void setData(double d);
     Data& operator=(const Data& d);
+    bool operator==(const Data& d2);
 };
 #endif // DATA_H

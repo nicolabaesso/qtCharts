@@ -10,7 +10,7 @@ Window::Window(QWidget *parent):QWidget(parent){
     QHBoxLayout* containerLayout=new QHBoxLayout;
     containerLayout->addLayout(toolbarLayout);
     containerLayout->addWidget(new QLabel);
-    QHBoxLayout* visualisationLayout=new QHBoxLayout;
+    visualisationLayout=new QHBoxLayout;
     initDataLayout(visualisationLayout);
     initChartLayout(visualisationLayout);
     mainLayout->addLayout(menuLayout);
@@ -20,6 +20,8 @@ Window::Window(QWidget *parent):QWidget(parent){
     setLayout(mainLayout);
     resize(QSize(1280,720));
 }
+
+
 
 void Window::initMenu(QHBoxLayout* mainLayout){
     QMenuBar* menuBar = new QMenuBar(this);
@@ -128,6 +130,8 @@ void Window::initExampleValues(DataHandler readedData){
 
 void Window::initDataValues(DataHandler readedData){
     initVectors(&readedData);
+    dataFrame=new QFrame(this);
+    visualisationLayout->replaceWidget(oldDataFrame,dataFrame);
     initDataFrame(dataFrame);
     setDataConnect();
     int size=readedData.getDataOnFile().size();
@@ -169,10 +173,17 @@ void Window::initChartLayout(QHBoxLayout* mainLayout){
     mainLayout->addWidget(charts);
 }
 
+void Window::initDataId(){
+    unsigned int i=labelVector.size();
+    for(unsigned int j=0;j<i;j++){
+        deleteDataComboBox->addItem(QString::number(j));
+    }
+}
+
 void Window::removeDataValues(){
     QLayoutItem* child;
     columnGridLayoutData=2;
-    while(rowGridLayoutData != -1){
+    while(rowGridLayoutData >= 0){
         child=dataFrame->layout()->takeAt(rowGridLayoutData+columnGridLayoutData);
         delete child;
         if(columnGridLayoutData==0){
@@ -183,8 +194,7 @@ void Window::removeDataValues(){
             columnGridLayoutData--;
         }
     }
-    columnGridLayoutData=0;
-    delete dataFrame->layout();
+    oldDataFrame=dataFrame;
     idVector.clear();
     labelVector.clear();
     dataVector.clear();
@@ -197,11 +207,27 @@ void Window::deletePreviousChart(){
     delete chartViewer;
 }
 
-QString Window::getNewFileName(){
+QString Window::getNewFileName() const{
     if(fileName==nullptr){
         return "Il mio grafico";
     }
     return fileName->toPlainText();
+}
+
+QString Window::getDeleteDataComboBoxValue() const{
+    return deleteDataComboBox->currentText();
+}
+
+const vector<QLabel *>& Window::getIdVector() const{
+    return idVector;
+}
+
+const vector<QLineEdit *>& Window::getLabelVector() const{
+    return labelVector;
+}
+
+const vector<QLineEdit *>& Window::getDataVector() const{
+    return dataVector;
 }
 
 void Window::setController(Controller* c){
@@ -217,7 +243,7 @@ void Window::setController(Controller* c){
     connect(newFileButton, SIGNAL(clicked()), controller, SLOT(newFile()));
     connect(openFileButton, SIGNAL(clicked()), controller, SLOT(openFile()));
     connect(saveFileButton, SIGNAL(clicked()), controller, SLOT(saveFile()));
-    connect(saveNewFileButton, SIGNAL(clicked()), controller, SLOT(saveFile()));
+    connect(saveNewFileButton, SIGNAL(clicked()), controller, SLOT(saveNewFile()));
     connect(loadBarChartButton, SIGNAL(clicked()), controller, SLOT(loadBarChart()));
     connect(loadLineChartButton, SIGNAL(clicked()), controller, SLOT(loadLineChart()));
     connect(loadPieChartButton, SIGNAL(clicked()), controller, SLOT(loadPieChart()));
@@ -225,9 +251,32 @@ void Window::setController(Controller* c){
 }
 
 void Window::setDataConnect(){
-    //connect(addDataButton, SIGNAL(clicked()), controller, SLOT(newFile()));
-    connect(saveDataButton, SIGNAL(clicked()), controller, SLOT(saveFile()));
-    //connect(deleteDataButton, SIGNAL(clicked()), controller, SLOT(newFile()));
+    connect(addDataButton, SIGNAL(clicked()), controller, SLOT(addData()));
+    connect(saveDataButton, SIGNAL(clicked()), controller, SLOT(saveData()));
+    connect(deleteDataButton, SIGNAL(clicked()), this, SLOT(deleteData()));
+}
+
+void Window::removeDeletedElement(int index){
+    QLabel* deletedId=idVector.at(index);
+    QLineEdit* deletedLabel=labelVector.at(index);
+    QLineEdit* deletedData=dataVector.at(index);
+    auto idIt=idVector.begin();
+    auto labelIt=labelVector.begin();
+    auto dataIt=dataVector.begin();
+    bool deleted=false;
+    while(!deleted){
+        if(*idIt==deletedId && *labelIt==deletedLabel && *dataIt==deletedData){
+            idVector.erase(idIt);
+            labelVector.erase(labelIt);
+            dataVector.erase(dataIt);
+            deleted=true;
+        }
+        else{
+            ++idIt;
+            ++labelIt;
+            ++dataIt;
+        }
+    }
 }
 
 void Window::createChart(Chart* c){
@@ -258,21 +307,47 @@ void Window::showNewFileDialog(){
     newFileDialog=new QDialog(this);
     fileName=new QPlainTextEdit(this);
     confirmNewFileButton=new QPushButton(this);
-    dialogLayout=new QGridLayout(this);
+    abortOperationButton=new QPushButton(this);
+    QGridLayout* dialogLayout=new QGridLayout;
     fileName->setPlainText("Il mio grafico");
     confirmNewFileButton->setText("Ok");
+    abortOperationButton->setText("Annulla");
     newFileDialog->setLayout(dialogLayout);
-    dialogLayout->addWidget(new QLabel("Scrivi un titolo per il tuo grafico (Attenzione, non lo potrai cambiare!)",newFileDialog),0,1);
-    dialogLayout->addWidget(fileName,1,1);
-    dialogLayout->addWidget(confirmNewFileButton,2,1);
-    dialogLayout->addWidget(new QLabel("",newFileDialog),2,0);
-    dialogLayout->addWidget(new QLabel("",newFileDialog),2,2);
-    newFileDialog->setMinimumWidth(120);
-    newFileDialog->setMaximumWidth(480);
-    newFileDialog->setMinimumHeight(120);
-    newFileDialog->setMaximumHeight(480);
+    dialogLayout->addWidget(new QLabel("Scrivi un titolo per il tuo grafico.",newFileDialog),0,1);
+    dialogLayout->addWidget(new QLabel("(Attenzione, non lo potrai cambiare!)",newFileDialog),1,1);
+    dialogLayout->addWidget(fileName,2,1);
+    dialogLayout->addWidget(confirmNewFileButton,3,0);
+    dialogLayout->addWidget(abortOperationButton,3,2);
+    newFileDialog->setMinimumWidth(360);
+    newFileDialog->setMaximumWidth(360);
+    newFileDialog->setMinimumHeight(240);
+    newFileDialog->setMaximumHeight(240);
     newFileDialog->show();
     connect(confirmNewFileButton, SIGNAL(clicked()), controller, SLOT(manageNewFile()));
+    connect(abortOperationButton, SIGNAL(clicked()), this, SLOT(abortOperation()));
+}
+
+void Window::showDeleteDataDialog(){
+    deleteDataDialog=new QDialog(this);
+    QGridLayout* deleteDataLayout=new QGridLayout;
+    deleteDataDialog->setLayout(deleteDataLayout);
+    deleteDataComboBox=new QComboBox(this);
+    initDataId();
+    deleteDataButton=new QPushButton(this);
+    abortOperationButton=new QPushButton(this);
+    deleteDataButton->setText("Ok");
+    abortOperationButton->setText("Annulla");
+    deleteDataLayout->addWidget(new QLabel("Scegliere l'ID del dato da eliminare.",deleteDataDialog));
+    deleteDataLayout->addWidget(deleteDataComboBox,1,1);
+    deleteDataLayout->addWidget(deleteDataButton,2,0);
+    deleteDataLayout->addWidget(abortOperationButton,2,2);
+    deleteDataDialog->setMinimumWidth(240);
+    deleteDataDialog->setMaximumWidth(240);
+    deleteDataDialog->setMinimumHeight(120);
+    deleteDataDialog->setMaximumHeight(120);
+    deleteDataDialog->show();
+    connect(deleteDataButton, SIGNAL(clicked()), controller, SLOT(deleteData()));
+    connect(abortOperationButton, SIGNAL(clicked()), this, SLOT(abortOperation()));
 }
 
 void Window::closeNewFileDialog(){
@@ -283,6 +358,19 @@ void Window::closeNewFileDialog(){
 void Window::closeWarning(){
     warningDialog->close();
     delete warningDialog;
+}
+
+void Window::closeDeleteDialog(){
+    deleteDataDialog->close();
+    delete deleteDataDialog;
+}
+
+void Window::abortOperation(){
+    showWarning("Operazione annullata.");
+}
+
+void Window::deleteData(){
+    showDeleteDataDialog();
 }
 
 void Window::showWarning(const QString& message){

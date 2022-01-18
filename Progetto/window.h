@@ -17,6 +17,7 @@
 #include <QDialogButtonBox>
 #include <QPushButton>
 #include <QLineEdit>
+#include <QComboBox>
 #include "chart.h"
 #include "lineChart.h"
 #include "pieChart.h"
@@ -41,7 +42,6 @@ private:
     QChartView* chartViewer;
     QGridLayout* chartL;
     QGridLayout* dataL;
-    QGridLayout* dialogLayout;
     QPushButton* addDataButton;
     QPushButton* saveDataButton;
     QPushButton* deleteDataButton;
@@ -53,14 +53,20 @@ private:
     QPushButton* loadLineChartButton;
     QPushButton* loadPieChartButton;
     QPushButton* confirmNewFileButton;
+    QPushButton* confirmDeleteDataButton;
     QPushButton* exitWarningButton;
+    QPushButton* abortOperationButton;
     QDialog* newFileDialog;
     QDialog* warningDialog;
+    QDialog* deleteDataDialog;
     QLabel* idData;
     QFrame* dataFrame;
     QLabel* idInit;
     QLabel* labelInit;
     QLabel* valueInit;
+    QComboBox* deleteDataComboBox;
+    QFrame* oldDataFrame;
+    QHBoxLayout* visualisationLayout;
 
     int rowGridLayoutData;
     int columnGridLayoutData;
@@ -77,6 +83,7 @@ private:
     void initDataFrame(QFrame* dataFrame);
 
     void setDataConnect();
+    void initDataId();
 public:
     Window(QWidget *parent=nullptr);
     void showWarning(const QString& message);
@@ -89,11 +96,21 @@ public:
     void createChart(Chart *c);
     void showNewFileDialog();
     void deletePreviousChart();
-    QString getNewFileName();
+    QString getNewFileName() const;
     void closeNewFileDialog();
+    void closeDeleteDialog();
     void removeDataValues();
     void initExampleValues(DataHandler readedData);
+    const vector<QLabel *> &getIdVector() const;
+
+    const vector<QLineEdit *> &getLabelVector() const;
+    const vector<QLineEdit *> &getDataVector() const;
+    void showDeleteDataDialog();
+    QString getDeleteDataComboBoxValue() const;
+    void removeDeletedElement(int index);
 private slots:
     void closeWarning();
+    void abortOperation();
+    void deleteData();
 };
 #endif // WINDOW_H

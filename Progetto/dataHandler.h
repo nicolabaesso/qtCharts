@@ -17,6 +17,8 @@ public:
     ~DataHandler()=default;
     DataHandler& operator=(const DataHandler& dh);
     void insertData(Data d);
+    void editData(Data d,int at);
+    void deleteData(int at);
     void setTitle(string t);
     const vector<Data> &getDataOnFile() const;
     string getTitle() const;

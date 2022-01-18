@@ -25,3 +25,18 @@ DataHandler& Model::getData(){
 void Model::setData(DataHandler d){
     file.setReadedData(d);
 }
+
+void Model::editData(DataHandler dh){
+    Data fileData, dhData;
+    for(unsigned int i=0;i<file.getReadedData().getDataOnFile().size();i++){
+        fileData=file.getReadedData().getDataOnFile().at(i);
+        dhData=dh.getDataOnFile().at(i);
+        if(!(fileData==dhData)){
+            file.editData(dhData,i);
+        }
+    }
+}
+
+void Model::deleteData(int index){
+    file.deleteData(index);
+}

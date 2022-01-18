@@ -25,6 +25,22 @@ void DataHandler::insertData(Data d){
     }
 }
 
+void DataHandler::editData(Data d, int at){
+    dataOnFile.at(at)=d;
+}
+
+void DataHandler::deleteData(int at){
+    Data dataToDelete=dataOnFile.at(at);
+    bool deleted=false;
+    auto it=dataOnFile.begin();
+    for(;!deleted && it!=dataOnFile.end();++it){
+        if(*it==dataToDelete){
+            dataOnFile.erase(it);
+            deleted=true;
+        }
+    }
+}
+
 void DataHandler::setTitle(std::string t){
     title=t;
 }

@@ -114,3 +114,15 @@ void FileHandler::clearData(){
     DataHandler noData=DataHandler();
     readedData=noData;
 }
+
+void FileHandler::addData(Data d){
+    readedData.insertData(d);
+}
+
+void FileHandler::editData(Data d, int index){
+    readedData.editData(d,index);
+}
+
+void FileHandler::deleteData(int index){
+    readedData.deleteData(index);
+}
