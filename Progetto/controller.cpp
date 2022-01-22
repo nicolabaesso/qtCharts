@@ -18,6 +18,17 @@ void Controller::loadExampleFile(){
     view->createChart();
 }
 
+void Controller::changeTitle(){
+    view->showChangeTitleDialog();
+}
+
+void Controller::manageChangeTitle(){
+    QString newTitle=view->getNewTitle();
+    view->closeNewTitleDialog();
+    model->setTitle(newTitle);
+    view->showWarning("Nome del grafico aggiornato con successo!");
+}
+
 void Controller::deleteData(){
     int id=view->getDeleteDataComboBoxValue().toInt();
     view->closeDeleteDialog();
@@ -107,7 +118,7 @@ void Controller::manageNewFile(){
     try{
         QString path=view->showSaveDialog();
         if(path == nullptr){
-            throw std::runtime_error("Error while saving: file not created.");
+            throw std::runtime_error("Errore durante il salvataggio: file non creato.");
         }
         model->setData(newFileData);
         model->saveNewFile(path);
@@ -116,7 +127,7 @@ void Controller::manageNewFile(){
         LineChart* newLineChart=new LineChart(readedData);
         view->setActiveChart(newLineChart);
         view->createChart();
-        view->showWarning("File successfully created!");
+        view->showWarning("File creato con successo!");
     }
     catch(std::runtime_error exc){
         view->showWarning(exc.what());
@@ -127,7 +138,7 @@ void Controller::openFile(){
     try{
         QString path=view->showOpenDialog();
         if(path == nullptr){
-            throw std::runtime_error("Error: file not open. Not a correct path");
+            throw std::runtime_error("Errore: file non aperto. Posizione non corretta");
         }
         DataHandler readedData=model->readFile(path);
         view->removeDataValues();
@@ -136,7 +147,7 @@ void Controller::openFile(){
         LineChart* newLineChart=new LineChart(readedData);
         view->setActiveChart(newLineChart);
         view->createChart();
-        view->showWarning("File successfully opened!");
+        view->showWarning("File aperto con successo!");
     }
     catch(std::runtime_error exc){
         view->showWarning(exc.what());
@@ -147,10 +158,10 @@ void Controller::saveNewFile(){
     try{
         QString path=view->showSaveDialog();
         if(path == nullptr){
-            throw std::runtime_error("Error: file not saved. Not a correct path.");
+            throw std::runtime_error("Errore: file non salvato. Posizione non corretta.");
         }
         model->saveNewFile(path);
-        view->showWarning("File successfully saved!");
+        view->showWarning("File salvato con successo!");
     }
     catch(std::runtime_error exc){
         view->showWarning(exc.what());
@@ -160,7 +171,7 @@ void Controller::saveNewFile(){
 void Controller::saveFile(){
     try{
         model->saveFile();
-        view->showWarning("File successfully saved!");
+        view->showWarning("File salvato con successo!");
     }
     catch(std::runtime_error exc){
         view->showWarning(exc.what());

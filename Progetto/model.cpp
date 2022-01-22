@@ -26,6 +26,10 @@ void Model::setData(DataHandler d){
     file.setReadedData(d);
 }
 
+void Model::setTitle(QString title){
+    file.setTitle(title);
+}
+
 void Model::editData(DataHandler dh){
     Data fileData, dhData;
     for(unsigned int i=0;i<file.getReadedData().getDataOnFile().size();i++){

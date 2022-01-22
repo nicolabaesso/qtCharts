@@ -21,6 +21,7 @@ public:
     void addData(Data d);
     void editData(Data d, int index);
     void deleteData(int index);
+    void setTitle(QString title);
 };
 
 #endif // FILEHANDLER_H

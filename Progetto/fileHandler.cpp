@@ -126,3 +126,7 @@ void FileHandler::editData(Data d, int index){
 void FileHandler::deleteData(int index){
     readedData.deleteData(index);
 }
+
+void FileHandler::setTitle(QString title){
+    readedData.setTitle(title.toStdString());
+}

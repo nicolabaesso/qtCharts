@@ -17,9 +17,7 @@ public:
 
 
 public slots:
-    /*
-    void showChart();
-    void changeChart();*/
+    void changeTitle();
     void deleteData();
     void addData();
     void saveData();
@@ -31,6 +29,7 @@ public slots:
     void loadPieChart();
     void loadBarChart();
     void saveNewFile();
+    void manageChangeTitle();
 };
 
 

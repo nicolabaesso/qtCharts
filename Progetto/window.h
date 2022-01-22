@@ -39,6 +39,7 @@ private:
     QMenu* file;
     QMenu* chart;
     QPlainTextEdit* fileName;
+    QLineEdit* newTitle;
     QChartView* chartViewer;
     QGridLayout* chartL;
     QGridLayout* dataL;
@@ -52,13 +53,16 @@ private:
     QPushButton* loadBarChartButton;
     QPushButton* loadLineChartButton;
     QPushButton* loadPieChartButton;
+    QPushButton* changeTitleButton;
     QPushButton* confirmNewFileButton;
     QPushButton* confirmDeleteDataButton;
+    QPushButton* confirmNewTitleButton;
     QPushButton* exitWarningButton;
     QPushButton* abortOperationButton;
     QDialog* newFileDialog;
     QDialog* warningDialog;
     QDialog* deleteDataDialog;
+    QDialog* changeTitleDialog;
     QLabel* idData;
     QFrame* dataFrame;
     QLabel* idInit;
@@ -110,10 +114,16 @@ public:
     void setActiveChart(Chart *newActiveChart);
 
     Chart *getActiveChart() const;
+    void showChangeTitleDialog();
+    QString getNewTitle() const;
+    void closeNewTitleDialog();
 private slots:
     void closeWarning();
     void abortOperation();
     void deleteData();
 
+    void abortNewFile();
+    void abortChangeTitle();
+    void abortDeleteData();
 };
 #endif // WINDOW_H

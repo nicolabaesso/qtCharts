@@ -15,6 +15,7 @@ public:
     void saveNewFile(QString path);
     void editData(DataHandler dh);
     void deleteData(int index);
+    void setTitle(QString title);
 };
 
 #endif // MODEL_H

@@ -30,6 +30,7 @@ void Window::initMenu(QHBoxLayout* mainLayout){
     file->addAction(new QAction("Salva",file));
     file->addAction(new QAction("Salva con nome",file));
     file->addAction(new QAction("Chiudi",file));
+    chart->addAction(new QAction("Cambia il titolo",chart));
     chart->addAction(new QAction("Mostra Istogramma",chart));
     chart->addAction(new QAction("Mostra Diagramma Cartesiano",chart));
     chart->addAction(new QAction("Mostra Areogramma (a torta)",chart));
@@ -47,6 +48,7 @@ void Window::initToolBar(QHBoxLayout* mainLayout){
     loadBarChartButton=new QPushButton(this);
     loadLineChartButton=new QPushButton(this);
     loadPieChartButton=new QPushButton(this);
+    changeTitleButton=new QPushButton(this);
     newFileButton->setText("Nuovo File");
     openFileButton->setText("Apri File");
     saveFileButton->setText("Salva File");
@@ -54,10 +56,12 @@ void Window::initToolBar(QHBoxLayout* mainLayout){
     loadBarChartButton->setText("Mostra Istogramma");
     loadLineChartButton->setText("Mostra Diagramma Cartesiano");
     loadPieChartButton->setText("Mostra Areogramma a torta");
+    changeTitleButton->setText("Cambia il titolo del grafico");
     mainLayout->addWidget(newFileButton);
     mainLayout->addWidget(openFileButton);
     mainLayout->addWidget(saveFileButton);
     mainLayout->addWidget(saveNewFileButton);
+    mainLayout->addWidget(changeTitleButton);
     mainLayout->addWidget(loadBarChartButton);
     mainLayout->addWidget(loadLineChartButton);
     mainLayout->addWidget(loadPieChartButton);
@@ -212,6 +216,13 @@ QString Window::getNewFileName() const{
     return fileName->toPlainText();
 }
 
+QString Window::getNewTitle() const{
+    if(newTitle==nullptr){
+        return "Il mio grafico";
+    }
+    return newTitle->text();
+}
+
 QString Window::getDeleteDataComboBoxValue() const{
     return deleteDataComboBox->currentText();
 }
@@ -243,9 +254,10 @@ void Window::setController(Controller* c){
     connect(file->actions().at(2),  SIGNAL(triggered()), controller, SLOT(saveFile()));
     connect(file->actions().at(3), SIGNAL(triggered()), controller, SLOT(saveNewFile()));
     connect(file->actions().at(4), SIGNAL(triggered()), this, SLOT(close()));
-    connect(chart->actions().at(0),  SIGNAL(triggered()), controller, SLOT(loadBarChart()));
-    connect(chart->actions().at(1),  SIGNAL(triggered()), controller, SLOT(loadLineChart()));
-    connect(chart->actions().at(2),  SIGNAL(triggered()), controller, SLOT(loadPieChart()));
+    connect(chart->actions().at(0), SIGNAL(triggered()), controller, SLOT(changeTitle()));
+    connect(chart->actions().at(1),  SIGNAL(triggered()), controller, SLOT(loadBarChart()));
+    connect(chart->actions().at(2),  SIGNAL(triggered()), controller, SLOT(loadLineChart()));
+    connect(chart->actions().at(3),  SIGNAL(triggered()), controller, SLOT(loadPieChart()));
     connect(newFileButton, SIGNAL(clicked()), controller, SLOT(newFile()));
     connect(openFileButton, SIGNAL(clicked()), controller, SLOT(openFile()));
     connect(saveFileButton, SIGNAL(clicked()), controller, SLOT(saveFile()));
@@ -253,6 +265,7 @@ void Window::setController(Controller* c){
     connect(loadBarChartButton, SIGNAL(clicked()), controller, SLOT(loadBarChart()));
     connect(loadLineChartButton, SIGNAL(clicked()), controller, SLOT(loadLineChart()));
     connect(loadPieChartButton, SIGNAL(clicked()), controller, SLOT(loadPieChart()));
+    connect(changeTitleButton, SIGNAL(clicked()), controller, SLOT(changeTitle()));
     setDataConnect();
 }
 
@@ -297,7 +310,7 @@ void Window::showNewFileDialog(){
     abortOperationButton->setText("Annulla");
     newFileDialog->setLayout(dialogLayout);
     dialogLayout->addWidget(new QLabel("Scrivi un titolo per il tuo grafico.",newFileDialog),0,1);
-    dialogLayout->addWidget(new QLabel("(Attenzione, non lo potrai cambiare!)",newFileDialog),1,1);
+    dialogLayout->addWidget(new QLabel("(Potrai cambiarlo successivamente.)",newFileDialog),1,1);
     dialogLayout->addWidget(fileName,2,1);
     dialogLayout->addWidget(confirmNewFileButton,3,0);
     dialogLayout->addWidget(abortOperationButton,3,2);
@@ -307,7 +320,7 @@ void Window::showNewFileDialog(){
     newFileDialog->setMaximumHeight(240);
     newFileDialog->show();
     connect(confirmNewFileButton, SIGNAL(clicked()), controller, SLOT(manageNewFile()));
-    connect(abortOperationButton, SIGNAL(clicked()), this, SLOT(abortOperation()));
+    connect(abortOperationButton, SIGNAL(clicked()), this, SLOT(abortNewFile()));
 }
 
 void Window::showDeleteDataDialog(){
@@ -330,7 +343,30 @@ void Window::showDeleteDataDialog(){
     deleteDataDialog->setMaximumHeight(120);
     deleteDataDialog->show();
     connect(deleteDataButton, SIGNAL(clicked()), controller, SLOT(deleteData()));
-    connect(abortOperationButton, SIGNAL(clicked()), this, SLOT(abortOperation()));
+    connect(abortOperationButton, SIGNAL(clicked()), this, SLOT(abortDeleteData()));
+}
+
+void Window::showChangeTitleDialog(){
+    changeTitleDialog=new QDialog(this);
+    newTitle=new QLineEdit(this);
+    confirmNewTitleButton=new QPushButton(this);
+    abortOperationButton=new QPushButton(this);
+    QGridLayout* dialogLayout=new QGridLayout;
+    newTitle->setText("Il mio grafico");
+    confirmNewTitleButton->setText("Ok");
+    abortOperationButton->setText("Annulla");
+    changeTitleDialog->setLayout(dialogLayout);
+    dialogLayout->addWidget(new QLabel("Inserisci il nuovo titolo per il tuo grafico.",changeTitleDialog),0,1);
+    dialogLayout->addWidget(newTitle,2,1);
+    dialogLayout->addWidget(confirmNewTitleButton,3,0);
+    dialogLayout->addWidget(abortOperationButton,3,2);
+    changeTitleDialog->setMinimumWidth(400);
+    changeTitleDialog->setMaximumWidth(400);
+    changeTitleDialog->setMinimumHeight(120);
+    changeTitleDialog->setMaximumHeight(120);
+    changeTitleDialog->show();
+    connect(confirmNewTitleButton, SIGNAL(clicked()), controller, SLOT(manageChangeTitle()));
+    connect(abortOperationButton, SIGNAL(clicked()), this, SLOT(abortChangeTitle()));
 }
 
 void Window::closeNewFileDialog(){
@@ -346,6 +382,29 @@ void Window::closeWarning(){
 void Window::closeDeleteDialog(){
     deleteDataDialog->close();
     delete deleteDataDialog;
+}
+
+void Window::closeNewTitleDialog(){
+    changeTitleDialog->close();
+    delete changeTitleDialog;
+}
+
+void Window::abortNewFile(){
+    newFileDialog->close();
+    delete newFileDialog;
+    abortOperation();
+}
+
+void Window::abortChangeTitle(){
+    changeTitleDialog->close();
+    delete changeTitleDialog;
+    abortOperation();
+}
+
+void Window::abortDeleteData(){
+    deleteDataDialog->close();
+    delete deleteDataDialog;
+    abortOperation();
 }
 
 void Window::abortOperation(){
