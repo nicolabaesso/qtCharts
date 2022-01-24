@@ -30,7 +30,6 @@
 
 \author{Nicola Baesso}
 \title{Relazione Progetto}
-\date{29 Novembre 2021}
 
 \begin{document}
 	\setlength{\baselineskip}{13 pt}
@@ -83,28 +82,64 @@
     \tableofcontents
     \newpage
     \section{Introduzione}
-     Questo progetto riguarda un applicativo C++ per la visione di dati sotto forma di grafici, fruibile tramite GUI grazie all' utilizzo del framework Qt.
+     Questo progetto riguarda un applicativo C++/Qt per la visione di dati sotto forma di grafici. L'applicazione permette una gestione ottimale dei dati, senza rinunciare alla comodità di un' interfaccia grafica.
     \subsection{Strumenti di sviluppo utilizzati}
-    Questo progetto è stato scritto utilizzando l'IDE QtCreator alla versione 5.0.3, ed è stato utilizzata la versione 5.9.5 del framework Qt. 
+    Il progetto è stato scritto utilizzando l'IDE QtCreator alla versione 4.5.2, ed è stato utilizzata la versione 5.9.5 del framework Qt. 
     La seguente relazione è stata create tramite LaTex utilizzando TexStudio.
     Il codice è stato scritto e testato in Windows 10 (versione 21H1) e in Debian 11 Bullseye.
-    Il codice è stato versionato tramite Git ed è anche disponibile (sotto il nome di QtCharts) a \href{https://github.com/nicolabaesso/qtCharts}{questo indirizzo}.
+    Inoltre, il codice è stato versionato tramite Git ed è anche disponibile (sotto il nome di QtCharts) a \href{https://github.com/nicolabaesso/qtCharts}{questo indirizzo}.
     \subsection{Compilazione ed esecuzione in sistemi Linux}
+    Per la compilazione "manuale" di questo progetto, sono necessari i seguenti kit:\\
+    -qt5-default (Qt 5.9.5)\\
+    -libqt5charts5-dev (QtCharts)
+    \\
+    \\
+    Inoltre, è fondamentale utilizzare il file Progetto.pro, fornito assieme a tutti i sorgenti necessari alla compilazione.\\
+    \\
+    La sequenza dei comandi è come segue:\\
+    -qmake Progetto.pro\\
+    -make
+    \\\\
+    L'utilizzo di un file .pro differente (tra cui quello generato da qmake -project) o il mancato utilizzo dei kit riportati non assicura la corretta compilazione del programma.
     \section{Funzionamento dell'applicazione}
     \subsection{Avvio e schermata iniziale}
-    All'avvio, l'applicazione genera un file di esempio, contenente 5 valori, al fine di mostrare sin dal principio le funzionalità presenti.
-    \subsection{GUI}
+    All'avvio, si verrà accolti dalla seguente schermata:
+    
+    insert image here
+    
+    L'applicazione genera un file di esempio, contenente 5 valori, al fine di mostrare sin dal principio le funzionalità presenti.
+     
+    \subsection{Interfaccia Grafica}
+    L'interfaccia può essere suddivisa in 3 aree principali:\\
+    -la toolbar, con i tasti necessari alla creazione di un nuovo file e al salvataggio di un file, nonchè a cambiare la tipologia di grafico visualizzato e al titolo dello stesso\\
+    -la sezione "dati", che contiene i tasti per l'aggiunta di un nuovo dato, il salvataggio dei dati visibili e l'eliminazione di un determinato dato, oltre ai dati stessi con la possibilità di modifica\\
+    -la sezione "grafici", che contiene la visualizzazione dei dati sotto forma del grafico scelto, costantemente aggiornato ad ogni modifica dei dati
+    
     \section{Tempistiche(Ore di lavoro)}
     \section{Caratteristiche tecniche}
     \subsection{URL e classi coinvolte}
+    insert image here\\
+    Al fine di evitare l'utilizzo di codice non estensibile, si è optato per l'utilizzo del modello MCV, che utilizza tre elementi (Model, View e Controller) per una migliore gestione degli eventi. Inoltre, come spiegato in maniera dettagliata successivamente, ogni classe presente nell'applicativo ha un ruolo ben preciso nella funzionalità.
     \subsubsection{Classe Data}
-    La classe data rappresenta un dato letto da file, o generato automaticamente all' avvio (si veda la sezioone "Avvio e schermata iniziale" per maggiori dettagli).
-    Tale classe è composta da una stringa, che rappresenta una breve descrizione del dato, e un valore numerico di tipo double, che rappresenta il valore del dato.
+    La classe Data rappresenta un singolo dato letto da file, o generato automaticamente all' avvio (si veda la sezione "Avvio e schermata iniziale" per maggiori dettagli).
+    Tale classe è composta da una stringa, che rappresenta una breve descrizione del dato, e un valore numerico di tipo double, che rappresenta il valore del dato. Sebbene per molte circostanze un valore di tipo double sia eccessivo, si è ritenuto adatto a rappresentare la maggior parte dei dati possibili.
+    \subsubsection{Classe DataHandler}
+    La classe DataHandler rappresenta i dati presenti nel file attualmente in lettura. Inoltre si occupa anche della modifica e della cancellazione dei dati stessi.
+    La classe è composta da una stringa, che rappresenta il titolo descrittivo dei dati, nonchè la stringa che verrà visualizzata come titolo del grafico, e una struttura dati, più precisamente un vector, contente elementi di tipo Data, che rappresenta i dati letti inizialmente dal file.
+    Si è optato per l'utilizzo della classe Vector, e non per altre strutture dati, magari semplici come un array, poichè le funzioni offerte da suddetta classe aiutano a gestire meglio i dati.
+    \subsubsection{Classe FileHandler}
+    \subsubsection{Classe Model}
+    \subsubsection{Classe Controller}
+    \subsubsection{Classe Window}
+    \subsubsection{Classe Chart}
+    \subsubsection{Classe BarChart}
+    \subsubsection{Classe LineChart}
+    \subsubsection{Classe PieChart}
     \subsection{Gerarchie di tipi}
     \subsection{Chiamate polimorfe}
     \subsection{Formato di file usato per I/O di file}
     Per questo progetto si è scelto di utilizzare il formato XML per la memorizzazione dei dati in file. Sebbene sia un formato "vecchio", permette una gestione più ordinata delle informazioni e permette di visualizzarle da un qualunque editor di testo.
-    Per questo motivo, i file letti devono obbligatoriamente avere la seguente formattazione: <inserire formattazione qui>
+    Per questo motivo, i file letti devono obbligatoriamente avere la formattazione visualizzabile anche da questa immagine: insert image here
 	% That's it!
 	
 \end{document}

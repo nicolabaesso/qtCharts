@@ -9,6 +9,8 @@ class Controller: public QObject{
 private:
     Window* view;
     Model* model;
+    void updateChart(Chart* chart);
+    
 public:
     Controller(QObject* parent=nullptr);
     void setView(Window* newView);

@@ -6,6 +6,9 @@ DataHandler& Model::readExampleFile(QString path){
 }
 
 DataHandler& Model::readFile(QString path){
+    if(path == nullptr){
+        throw std::runtime_error("Errore: file non aperto. Posizione non corretta");
+    }
     file.clearData();
     return file.readFromFile(path);
 }
@@ -15,6 +18,9 @@ void Model::saveFile(){
 }
 
 void Model::saveNewFile(QString path){
+    if(path == nullptr){
+        throw std::runtime_error("Errore: file non salvato. Posizione non corretta.");
+    }
     file.saveNewFile(path);
 }
 

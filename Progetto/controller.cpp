@@ -26,6 +26,8 @@ void Controller::manageChangeTitle(){
     QString newTitle=view->getNewTitle();
     view->closeNewTitleDialog();
     model->setTitle(newTitle);
+    Chart* chart=view->getActiveChart();
+    updateChart(chart);
     view->showWarning("Nome del grafico aggiornato con successo!");
 }
 
@@ -37,18 +39,7 @@ void Controller::deleteData(){
     view->removeDataValues();
     view->initDataValues(model->getData());
     Chart* chart=view->getActiveChart();
-    bool identifiedChart=false;
-    if(dynamic_cast<LineChart*>(chart)){
-        loadLineChart();
-        identifiedChart=true;
-    }
-    if(!identifiedChart && dynamic_cast<BarChart*>(chart)){
-        loadBarChart();
-        identifiedChart=true;
-    }
-    if(!identifiedChart && dynamic_cast<PieChart*>(chart)){
-        loadPieChart();
-    }
+    updateChart(chart);
     view->showWarning("Dato eliminato con successo!");
 }
 
@@ -60,6 +51,11 @@ void Controller::addData(){
     view->removeDataValues();
     view->initDataValues(model->getData());
     Chart* chart=view->getActiveChart();
+    updateChart(chart);
+    view->showWarning("Dato aggiunto con successo!");
+}
+
+void Controller::updateChart(Chart* chart){
     bool identifiedChart=false;
     if(dynamic_cast<LineChart*>(chart)){
         loadLineChart();
@@ -72,7 +68,6 @@ void Controller::addData(){
     if(!identifiedChart && dynamic_cast<PieChart*>(chart)){
         loadPieChart();
     }
-    view->showWarning("Dato aggiunto con successo!");
 }
 
 void Controller::saveData(){
@@ -91,18 +86,7 @@ void Controller::saveData(){
     model->editData(dataToSave);
     model->saveFile();
     Chart* chart=view->getActiveChart();
-    bool identifiedChart=false;
-    if(dynamic_cast<LineChart*>(chart)){
-        loadLineChart();
-        identifiedChart=true;
-    }
-    if(!identifiedChart && dynamic_cast<BarChart*>(chart)){
-        loadBarChart();
-        identifiedChart=true;
-    }
-    if(!identifiedChart && dynamic_cast<PieChart*>(chart)){
-        loadPieChart();
-    }
+    updateChart(chart);
     view->showWarning("Dati aggiornati con successo!");
 }
 
@@ -137,16 +121,11 @@ void Controller::manageNewFile(){
 void Controller::openFile(){
     try{
         QString path=view->showOpenDialog();
-        if(path == nullptr){
-            throw std::runtime_error("Errore: file non aperto. Posizione non corretta");
-        }
         DataHandler readedData=model->readFile(path);
         view->removeDataValues();
         view->initDataValues(readedData);
-        view->deletePreviousChart();
-        LineChart* newLineChart=new LineChart(readedData);
-        view->setActiveChart(newLineChart);
-        view->createChart();
+        Chart* chart=view->getActiveChart();
+        updateChart(chart);
         view->showWarning("File aperto con successo!");
     }
     catch(std::runtime_error exc){
@@ -155,11 +134,8 @@ void Controller::openFile(){
 }
 
 void Controller::saveNewFile(){
+    QString path=view->showSaveDialog();
     try{
-        QString path=view->showSaveDialog();
-        if(path == nullptr){
-            throw std::runtime_error("Errore: file non salvato. Posizione non corretta.");
-        }
         model->saveNewFile(path);
         view->showWarning("File salvato con successo!");
     }
@@ -169,13 +145,8 @@ void Controller::saveNewFile(){
 }
 
 void Controller::saveFile(){
-    try{
-        model->saveFile();
-        view->showWarning("File salvato con successo!");
-    }
-    catch(std::runtime_error exc){
-        view->showWarning(exc.what());
-    }
+    model->saveFile();
+    view->showWarning("File salvato con successo!");
 }
 
 void Controller::loadLineChart(){
