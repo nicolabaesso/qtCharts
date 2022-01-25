@@ -78,6 +78,8 @@
     
     23/01/2022 (1 ora): modifica nome grafico e aggiunta icona applicazione. Da fare: tema scuro, auto-update, test...
     
+    25/01/2022 (3 ore): sistemazione codice.
+    
     \newpage
     \tableofcontents
     \newpage
@@ -99,7 +101,8 @@
     La sequenza dei comandi è come segue:\\
     -qmake Progetto.pro\\
     -make
-    \\\\
+    \\
+    Alla fine verrà generato un file chiamato Progetto, lo si può eseguire scrivendo ./Progetto\\\\
     L'utilizzo di un file .pro differente (tra cui quello generato da qmake -project) o il mancato utilizzo dei kit riportati non assicura la corretta compilazione del programma.
     \section{Funzionamento dell'applicazione}
     \subsection{Avvio e schermata iniziale}
@@ -124,13 +127,17 @@
     La classe Data rappresenta un singolo dato letto da file, o generato automaticamente all' avvio (si veda la sezione "Avvio e schermata iniziale" per maggiori dettagli).
     Tale classe è composta da una stringa, che rappresenta una breve descrizione del dato, e un valore numerico di tipo double, che rappresenta il valore del dato. Sebbene per molte circostanze un valore di tipo double sia eccessivo, si è ritenuto adatto a rappresentare la maggior parte dei dati possibili.
     \subsubsection{Classe DataHandler}
-    La classe DataHandler rappresenta i dati presenti nel file attualmente in lettura. Inoltre si occupa anche della modifica e della cancellazione dei dati stessi.
+    La classe DataHandler rappresenta i dati presenti nel file letto per ultimo. Inoltre si occupa anche della modifica e della cancellazione dei dati stessi.
     La classe è composta da una stringa, che rappresenta il titolo descrittivo dei dati, nonchè la stringa che verrà visualizzata come titolo del grafico, e una struttura dati, più precisamente un vector, contente elementi di tipo Data, che rappresenta i dati letti inizialmente dal file.
     Si è optato per l'utilizzo della classe Vector, e non per altre strutture dati, magari semplici come un array, poichè le funzioni offerte da suddetta classe aiutano a gestire meglio i dati.
     \subsubsection{Classe FileHandler}
+    La classe FileHandler ha lo scopo di lettura vera e propria dei dati dal file, nonchè del salvataggio di essi nello stesso o in un nuovo file. Contiene un campo QString, che rappresenta il nome del file, e un DataHandler che rappresenta i dati letti o da salvare nel file.
     \subsubsection{Classe Model}
+    La classe Model è la classe che gestisce ogni singolo aspetto del modello. Essa contiene un campo FileHandler, che rappresenta  il file in lettura/scrittura.
     \subsubsection{Classe Controller}
+    La classe Controller funge da tramite tra model e view. In particolare, gestisce gli eventi evocati nella view tramite interfaccia grafica, e li collega agli eventi nel model. I suoi unici campi sono di tipo Model* e Window*, ovvero puntatori a, rispettivamente, modello e view. Inoltre, ha principalmente slot invocati dai signal che emette la classe Window.
     \subsubsection{Classe Window}
+    La classe Window si occupa di ogni particolare relativo all'interfaccia grafica. In altre parole, Si occupa della visualizzazione dei dati e dei grafici, nonchè alla creazione e visualizzazione dei vari menù e finestre. Contiene svariati campi, tra cui di tipo QPushButton*, QMenu*,QDialog*...\\Inoltre, ha un campo di tipo Controller* per associare ogni elemento interagibile ad un determinato segnale.
     \subsubsection{Classe Chart}
     \subsubsection{Classe BarChart}
     \subsubsection{Classe LineChart}

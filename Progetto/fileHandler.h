@@ -9,7 +9,7 @@ private:
     void initExampleFile();
 public:
     FileHandler(DataHandler rd=DataHandler());
-    ~FileHandler();
+    ~FileHandler()=default;
     DataHandler& readFromFile(QString path="./example.xml");
     void saveFile();
     DataHandler& getReadedData();

@@ -18,7 +18,6 @@ SOURCES += \
     controller.cpp \
     data.cpp \
     dataHandler.cpp \
-    exception.cpp \
     fileHandler.cpp \
     main.cpp \
     model.cpp \
@@ -31,7 +30,6 @@ HEADERS += \
     controller.h \
     data.h \
     dataHandler.h \
-    exception.h \
     fileHandler.h \
     lineChart.h \
     model.h \

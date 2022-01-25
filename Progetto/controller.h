@@ -11,12 +11,13 @@ private:
     Model* model;
     void updateChart(Chart* chart);
     
+    void updateData(DataHandler dh);
+    
 public:
     Controller(QObject* parent=nullptr);
     void setView(Window* newView);
     void setModel(Model* newModel);
     void loadExampleFile();
-
 
 public slots:
     void changeTitle();

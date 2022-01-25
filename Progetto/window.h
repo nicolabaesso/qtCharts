@@ -11,7 +11,6 @@
 #include <QLabel>
 #include <QDialog>
 #include <QFileDialog>
-#include <QPlainTextEdit>
 #include <QChart>
 #include <QChartView>
 #include <QDialogButtonBox>
@@ -38,7 +37,7 @@ private:
     vector<QLineEdit*> dataVector;
     QMenu* file;
     QMenu* chart;
-    QPlainTextEdit* fileName;
+    QLineEdit* fileName;
     QLineEdit* newTitle;
     QChartView* chartViewer;
     QGridLayout* chartL;
@@ -117,6 +116,7 @@ public:
     void showChangeTitleDialog();
     QString getNewTitle() const;
     void closeNewTitleDialog();
+    void checkDataLabel();
 private slots:
     void closeWarning();
     void abortOperation();

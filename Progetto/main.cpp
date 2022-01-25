@@ -1,4 +1,3 @@
-//#include "mainwindow.h"
 #include "window.h"
 #include "model.h"
 #include "controller.h"
@@ -6,8 +5,6 @@
 
 int main(int argc, char *argv[]){
     QApplication a(argc, argv);
-    //MainWindow w;
-
     Window w;
     Controller c;
     Model m;

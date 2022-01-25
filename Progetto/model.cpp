@@ -33,6 +33,9 @@ void Model::setData(DataHandler d){
 }
 
 void Model::setTitle(QString title){
+    if(title == nullptr){
+        throw std::runtime_error("Errore: titolo non valido.");
+    }
     file.setTitle(title);
 }
 

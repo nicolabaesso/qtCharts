@@ -1,17 +1,16 @@
 #include "fileHandler.h"
-#include "exception.h"
 FileHandler::FileHandler(DataHandler rd): readedData(rd){
     initExampleFile();
 }
 DataHandler& FileHandler::readFromFile(QString path){
     QFile file(path);
     if(!file.open(QIODevice::ReadOnly | QIODevice::Text)){
-        qDebug()<<"Error: File not open.";
+        throw std::runtime_error("Errore: file non aperto.");
     }
     else{
         QDomDocument readedFile;
         if(!readedFile.setContent(&file)){
-            qDebug()<<"Error: Cannot load document.";
+            throw std::runtime_error("Errore: impossibile caricare il documento.");
         }
         else{
             QDomElement root=readedFile.firstChildElement();
@@ -32,7 +31,6 @@ DataHandler& FileHandler::readFromFile(QString path){
                 }
             }
             setFileName(path);
-            qDebug()<<"File succesfully readed!";
         }
     }
     file.close();
@@ -75,10 +73,6 @@ void FileHandler::initExampleFile(){
     ex.close();
 }
 void FileHandler::saveFile(){
-    if(fileName == nullptr){
-        qDebug()<<"Cannot save file: no valid path";
-        return;
-    }
     QDomDocument save;
     QDomElement root=save.createElement("Title");
     root.setAttribute("Name",QString::fromStdString(readedData.title));
@@ -98,16 +92,8 @@ void FileHandler::saveFile(){
     s.close();
 }
 void FileHandler::saveNewFile(QString path){
-    if(path == nullptr){
-        qDebug()<<"Cannot save file: no valid path";
-    }
-    else{
-        setFileName(path);
-        saveFile();
-    }
-}
-FileHandler::~FileHandler(){
-    //delete this;
+     setFileName(path);
+     saveFile();
 }
 
 void FileHandler::clearData(){

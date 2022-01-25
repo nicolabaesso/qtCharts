@@ -8,21 +8,10 @@ string DataHandler::getTitle() const{
     return title;
 }
 
-DataHandler::DataHandler(string t):title(t){
-    dataOnFile.push_back(Data());
-}
+DataHandler::DataHandler(string t):title(t){}
+
 void DataHandler::insertData(Data d){
-    bool inserted=false;
-    auto it=dataOnFile.begin();
-    for(;!inserted && it!=dataOnFile.end();++it){
-        if((*it).getLabel()=="default"){
-            (*it)=d;
-            inserted=true;
-        }
-    }
-    if(!inserted){
-        dataOnFile.push_back(d);
-    }
+    dataOnFile.push_back(d);
 }
 
 void DataHandler::editData(Data d, int at){

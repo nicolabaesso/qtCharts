@@ -213,7 +213,7 @@ QString Window::getNewFileName() const{
     if(fileName==nullptr){
         return "Il mio grafico";
     }
-    return fileName->toPlainText();
+    return fileName->text();
 }
 
 QString Window::getNewTitle() const{
@@ -275,6 +275,16 @@ void Window::setDataConnect(){
     connect(deleteDataButton, SIGNAL(clicked()), this, SLOT(deleteData()));
 }
 
+void Window::checkDataLabel(){
+    bool isOk;
+    for(unsigned int i=0;i<dataVector.size();i++){
+        dataVector.at(i)->text().toDouble(&isOk);
+        if(!isOk){
+            throw std::runtime_error("Uno o più valori non sono validi. Modificarli e riprovare.");
+        }
+    }
+}
+
 void Window::createChart(){
     if(dynamic_cast<LineChart*>(activeChart)){
         static_cast<LineChart*>(activeChart)->setData();
@@ -301,11 +311,11 @@ void Window::showChart(QChart* c){
 
 void Window::showNewFileDialog(){
     newFileDialog=new QDialog(this);
-    fileName=new QPlainTextEdit(this);
+    fileName=new QLineEdit(this);
     confirmNewFileButton=new QPushButton(this);
     abortOperationButton=new QPushButton(this);
     QGridLayout* dialogLayout=new QGridLayout;
-    fileName->setPlainText("Il mio grafico");
+    fileName->setText("Il mio grafico");
     confirmNewFileButton->setText("Ok");
     abortOperationButton->setText("Annulla");
     newFileDialog->setLayout(dialogLayout);
@@ -318,6 +328,7 @@ void Window::showNewFileDialog(){
     newFileDialog->setMaximumWidth(360);
     newFileDialog->setMinimumHeight(240);
     newFileDialog->setMaximumHeight(240);
+    newFileDialog->setModal(true);
     newFileDialog->show();
     connect(confirmNewFileButton, SIGNAL(clicked()), controller, SLOT(manageNewFile()));
     connect(abortOperationButton, SIGNAL(clicked()), this, SLOT(abortNewFile()));
@@ -341,6 +352,7 @@ void Window::showDeleteDataDialog(){
     deleteDataDialog->setMaximumWidth(240);
     deleteDataDialog->setMinimumHeight(120);
     deleteDataDialog->setMaximumHeight(120);
+    deleteDataDialog->setModal(true);
     deleteDataDialog->show();
     connect(deleteDataButton, SIGNAL(clicked()), controller, SLOT(deleteData()));
     connect(abortOperationButton, SIGNAL(clicked()), this, SLOT(abortDeleteData()));
@@ -364,6 +376,7 @@ void Window::showChangeTitleDialog(){
     changeTitleDialog->setMaximumWidth(400);
     changeTitleDialog->setMinimumHeight(120);
     changeTitleDialog->setMaximumHeight(120);
+    changeTitleDialog->setModal(true);
     changeTitleDialog->show();
     connect(confirmNewTitleButton, SIGNAL(clicked()), controller, SLOT(manageChangeTitle()));
     connect(abortOperationButton, SIGNAL(clicked()), this, SLOT(abortChangeTitle()));
@@ -428,6 +441,7 @@ void Window::showWarning(const QString& message){
     warningDialog->setMaximumWidth(480);
     warningDialog->setMinimumHeight(120);
     warningDialog->setMaximumHeight(480);
+    warningDialog->setModal(true);
     warningDialog->show();
     connect(exitWarningButton, SIGNAL(clicked()), this, SLOT(closeWarning()));
 }

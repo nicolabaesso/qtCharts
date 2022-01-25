@@ -25,10 +25,20 @@ void Controller::changeTitle(){
 void Controller::manageChangeTitle(){
     QString newTitle=view->getNewTitle();
     view->closeNewTitleDialog();
-    model->setTitle(newTitle);
-    Chart* chart=view->getActiveChart();
-    updateChart(chart);
-    view->showWarning("Nome del grafico aggiornato con successo!");
+    try{
+        model->setTitle(newTitle);
+        Chart* chart=view->getActiveChart();
+        updateChart(chart);
+        view->showWarning("Nome del grafico aggiornato con successo!");
+    }
+    catch(std::runtime_error exc){
+        view->showWarning(exc.what());
+    }
+}
+
+void Controller::updateData(DataHandler dh){
+    view->removeDataValues();
+    view->initDataValues(dh);
 }
 
 void Controller::deleteData(){
@@ -36,8 +46,7 @@ void Controller::deleteData(){
     view->closeDeleteDialog();
     model->deleteData(id);
     model->saveFile();
-    view->removeDataValues();
-    view->initDataValues(model->getData());
+    updateData(model->getData());
     Chart* chart=view->getActiveChart();
     updateChart(chart);
     view->showWarning("Dato eliminato con successo!");
@@ -48,8 +57,7 @@ void Controller::addData(){
     dataWithNew.insertData(Data());
     model->setData(dataWithNew);
     model->saveFile();
-    view->removeDataValues();
-    view->initDataValues(model->getData());
+    updateData(model->getData());
     Chart* chart=view->getActiveChart();
     updateChart(chart);
     view->showWarning("Dato aggiunto con successo!");
@@ -71,23 +79,29 @@ void Controller::updateChart(Chart* chart){
 }
 
 void Controller::saveData(){
-    vector<QLineEdit*> labels=view->getLabelVector();
-    vector<QLineEdit*> datas=view->getDataVector();
-    DataHandler dataToSave;
-    Data singleDataToSave;
-    QString label, data;
-    for(unsigned int i=0;i<labels.size();i++){
-        label=labels.at(i)->text();
-        data=datas.at(i)->text();
-        singleDataToSave.setLabel(label.toStdString());
-        singleDataToSave.setData(data.toDouble());
-        dataToSave.insertData(singleDataToSave);
+    try{
+        view->checkDataLabel();
+        vector<QLineEdit*> labels=view->getLabelVector();
+        vector<QLineEdit*> datas=view->getDataVector();
+        DataHandler dataToSave;
+        Data singleDataToSave;
+        QString label, data;
+        for(unsigned int i=0;i<labels.size();i++){
+            label=labels.at(i)->text();
+            data=datas.at(i)->text();
+            singleDataToSave.setLabel(label.toStdString());
+            singleDataToSave.setData(data.toDouble());
+            dataToSave.insertData(singleDataToSave);
+        }
+        model->editData(dataToSave);
+        model->saveFile();
+        Chart* chart=view->getActiveChart();
+        updateChart(chart);
+        view->showWarning("Dati aggiornati con successo!");
     }
-    model->editData(dataToSave);
-    model->saveFile();
-    Chart* chart=view->getActiveChart();
-    updateChart(chart);
-    view->showWarning("Dati aggiornati con successo!");
+    catch(std::runtime_error exc){
+        view->showWarning(exc.what());
+    }
 }
 
 void Controller::newFile(){
@@ -95,10 +109,9 @@ void Controller::newFile(){
 }
 
 void Controller::manageNewFile(){
-    view->closeNewFileDialog();
-    DataHandler newFileData=DataHandler();
+    view->closeNewFileDialog(); 
     QString name=view->getNewFileName();
-    newFileData.setTitle(name.toStdString());
+    DataHandler newFileData=DataHandler(name.toStdString());
     try{
         QString path=view->showSaveDialog();
         if(path == nullptr){
@@ -107,10 +120,9 @@ void Controller::manageNewFile(){
         model->setData(newFileData);
         model->saveNewFile(path);
         DataHandler readedData=model->readFile(path);
-        view->deletePreviousChart();
-        LineChart* newLineChart=new LineChart(readedData);
-        view->setActiveChart(newLineChart);
-        view->createChart();
+        updateData(readedData);
+        Chart* chart=view->getActiveChart();
+        updateChart(chart);
         view->showWarning("File creato con successo!");
     }
     catch(std::runtime_error exc){
@@ -122,8 +134,7 @@ void Controller::openFile(){
     try{
         QString path=view->showOpenDialog();
         DataHandler readedData=model->readFile(path);
-        view->removeDataValues();
-        view->initDataValues(readedData);
+        updateData(readedData);
         Chart* chart=view->getActiveChart();
         updateChart(chart);
         view->showWarning("File aperto con successo!");
@@ -169,4 +180,3 @@ void Controller::loadBarChart(){
     view->setActiveChart(newBarChart);
     view->createChart();
 }
-
