@@ -14,7 +14,7 @@ public:
     PieChart(DataHandler& dh);
     void setData();
     QChart* showChart();
-    PieChart &operator =(const PieChart &pc);
+    PieChart &operator =(const PieChart& pc);
 };
 
 #endif // PIECHART_H

@@ -12,6 +12,6 @@ public:
     LineChart(DataHandler& dh);
     void setData();
     QChart* showChart();
-    LineChart &operator =(const LineChart &dh);
+    LineChart &operator =(const LineChart& lc);
 };
 #endif // LINECHART_H

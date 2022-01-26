@@ -11,8 +11,8 @@ public:
     ~Data()=default;
     string getLabel() const;
     double getData() const;
-    void setLabel(string l);
-    void setData(double d);
+    void setLabel(const string& l);
+    void setData(const double& d);
     Data& operator=(const Data& d);
     bool operator==(const Data& d2);
 };

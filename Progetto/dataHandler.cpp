@@ -1,44 +1,14 @@
 #include <vector>
 #include "dataHandler.h"
+
+DataHandler::DataHandler(string t):title(t){}
+
 const vector<Data> &DataHandler::getDataOnFile() const{
     return dataOnFile;
 }
 
-string DataHandler::getTitle() const{
+const string& DataHandler::getTitle() const{
     return title;
-}
-
-DataHandler::DataHandler(string t):title(t){}
-
-void DataHandler::insertData(Data d){
-    dataOnFile.push_back(d);
-}
-
-void DataHandler::editData(Data d, int at){
-    dataOnFile.at(at)=d;
-}
-
-void DataHandler::deleteData(int at){
-    Data dataToDelete=dataOnFile.at(at);
-    bool deleted=false;
-    auto it=dataOnFile.begin();
-    for(;!deleted && it!=dataOnFile.end();++it){
-        if(*it==dataToDelete){
-            dataOnFile.erase(it);
-            deleted=true;
-        }
-    }
-}
-
-void DataHandler::setTitle(std::string t){
-    title=t;
-}
-DataHandler& DataHandler::operator=(const DataHandler& dh){
-    if(this != &dh){
-        title=dh.title;
-        dataOnFile=dh.dataOnFile;
-    }
-    return *this;
 }
 
 double DataHandler::getMinData(){
@@ -72,4 +42,36 @@ double DataHandler::getMaxData(){
         }
         return max;
     }
+}
+
+void DataHandler::setTitle(const string& t){
+    title=t;
+}
+
+void DataHandler::insertData(const Data& d){
+    dataOnFile.push_back(d);
+}
+
+void DataHandler::editData(const Data& d, const int& at){
+    dataOnFile.at(at)=d;
+}
+
+void DataHandler::deleteData(const int& at){
+    Data dataToDelete=dataOnFile.at(at);
+    bool deleted=false;
+    auto it=dataOnFile.begin();
+    for(;!deleted && it!=dataOnFile.end();++it){
+        if(*it==dataToDelete){
+            dataOnFile.erase(it);
+            deleted=true;
+        }
+    }
+}
+
+DataHandler& DataHandler::operator=(const DataHandler& dh){
+    if(this != &dh){
+        title=dh.title;
+        dataOnFile=dh.dataOnFile;
+    }
+    return *this;
 }

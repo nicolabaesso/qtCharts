@@ -10,7 +10,6 @@ private:
     Window* view;
     Model* model;
     void updateChart(Chart* chart);
-    
     void updateData(DataHandler dh);
     
 public:

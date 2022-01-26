@@ -53,9 +53,7 @@ void Controller::deleteData(){
 }
 
 void Controller::addData(){
-    DataHandler dataWithNew=model->getData();
-    dataWithNew.insertData(Data());
-    model->setData(dataWithNew);
+    model->addData();
     model->saveFile();
     updateData(model->getData());
     Chart* chart=view->getActiveChart();

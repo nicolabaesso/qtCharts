@@ -75,18 +75,15 @@ private:
     int columnGridLayoutData;
 
     void initMenu(QHBoxLayout *mainLayout);
-
     void initDataLayout(QHBoxLayout* mainLayout);
     void initChartLayout(QHBoxLayout* mainLayout);
-
     void initToolBar(QHBoxLayout *mainLayout);
-
     void initVectors(DataHandler* readedData);
     void removeFromLayout(int row, int column);
     void initDataFrame(QFrame* dataFrame);
-
     void setDataConnect();
     void initDataId();
+
 public:
     Window(QWidget *parent=nullptr);
     void showWarning(const QString& message);
@@ -111,17 +108,16 @@ public:
     QString getDeleteDataComboBoxValue() const;
     Chart *getChart() const;
     void setActiveChart(Chart *newActiveChart);
-
     Chart *getActiveChart() const;
     void showChangeTitleDialog();
     QString getNewTitle() const;
     void closeNewTitleDialog();
     void checkDataLabel();
+
 private slots:
     void closeWarning();
     void abortOperation();
     void deleteData();
-
     void abortNewFile();
     void abortChangeTitle();
     void abortDeleteData();

@@ -10,18 +10,17 @@ private:
 public:
     FileHandler(DataHandler rd=DataHandler());
     ~FileHandler()=default;
-    DataHandler& readFromFile(QString path="./example.xml");
+    DataHandler& readFromFile(const QString& path="./example.xml");
     void saveFile();
     DataHandler& getReadedData();
     void clearData();
-    void setReadedData(const DataHandler &newReadedData);
-    const QString &getFileName() const;
-    void setFileName(const QString &newFileName);
-    void saveNewFile(QString path);
-    void addData(Data d);
-    void editData(Data d, int index);
-    void deleteData(int index);
-    void setTitle(QString title);
+    void setReadedData(const DataHandler& newReadedData);
+    void setFileName(const QString& newFileName);
+    void saveNewFile(const QString& path);
+    void addData(const Data& d);
+    void editData(const Data& d, const int& index);
+    void deleteData(const int& index);
+    void setTitle(const QString& title);
 };
 
 #endif // FILEHANDLER_H

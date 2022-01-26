@@ -1,11 +1,26 @@
 #include "model.h"
 Model::Model(){}
 
-DataHandler& Model::readExampleFile(QString path){
+DataHandler& Model::getData(){
+    return file.getReadedData();
+}
+
+void Model::setData(const DataHandler& d){
+    file.setReadedData(d);
+}
+
+void Model::setTitle(const QString& title){
+    if(title == nullptr){
+        throw std::runtime_error("Errore: titolo non valido.");
+    }
+    file.setTitle(title);
+}
+
+DataHandler& Model::readExampleFile(const QString& path){
     return file.readFromFile(path);
 }
 
-DataHandler& Model::readFile(QString path){
+DataHandler& Model::readFile(const QString& path){
     if(path == nullptr){
         throw std::runtime_error("Errore: file non aperto. Posizione non corretta");
     }
@@ -17,29 +32,18 @@ void Model::saveFile(){
     file.saveFile();
 }
 
-void Model::saveNewFile(QString path){
+void Model::saveNewFile(const QString& path){
     if(path == nullptr){
         throw std::runtime_error("Errore: file non salvato. Posizione non corretta.");
     }
     file.saveNewFile(path);
 }
 
-DataHandler& Model::getData(){
-    return file.getReadedData();
+void Model::addData(){
+    file.addData(Data());
 }
 
-void Model::setData(DataHandler d){
-    file.setReadedData(d);
-}
-
-void Model::setTitle(QString title){
-    if(title == nullptr){
-        throw std::runtime_error("Errore: titolo non valido.");
-    }
-    file.setTitle(title);
-}
-
-void Model::editData(DataHandler dh){
+void Model::editData(const DataHandler& dh){
     Data fileData, dhData;
     for(unsigned int i=0;i<file.getReadedData().getDataOnFile().size();i++){
         fileData=file.getReadedData().getDataOnFile().at(i);
@@ -50,6 +54,6 @@ void Model::editData(DataHandler dh){
     }
 }
 
-void Model::deleteData(int index){
+void Model::deleteData(const int& index){
     file.deleteData(index);
 }

@@ -2,7 +2,45 @@
 FileHandler::FileHandler(DataHandler rd): readedData(rd){
     initExampleFile();
 }
-DataHandler& FileHandler::readFromFile(QString path){
+
+DataHandler& FileHandler::getReadedData(){
+    return readedData;
+}
+
+void FileHandler::setReadedData(const DataHandler& newReadedData){
+    readedData = newReadedData;
+}
+
+void FileHandler::setFileName(const QString& newFileName){
+    fileName = newFileName;
+}
+
+void FileHandler::setTitle(const QString& title){
+    readedData.setTitle(title.toStdString());
+}
+
+void FileHandler::initExampleFile(){
+    QDomDocument example;
+    QDomElement root=example.createElement("Title");
+    root.setAttribute("Name","Dati d'esempio");
+    example.appendChild(root);
+    int j;
+    for(int i=0;i<5;i++){
+        j=i+1;
+        QDomElement data=example.createElement("Data");
+        data.setAttribute("ID",QString::number(i));
+        data.setAttribute("Label","Default");
+        data.setAttribute("Data",j);
+        root.appendChild(data);
+    }
+    QFile ex("./example.xml");
+    ex.open(QIODevice::WriteOnly);
+    QTextStream stream(&ex);
+    stream<<example.toString();
+    ex.close();
+}
+
+DataHandler& FileHandler::readFromFile(const QString& path){
     QFile file(path);
     if(!file.open(QIODevice::ReadOnly | QIODevice::Text)){
         throw std::runtime_error("Errore: file non aperto.");
@@ -36,42 +74,7 @@ DataHandler& FileHandler::readFromFile(QString path){
     file.close();
     return readedData;
 }
-DataHandler& FileHandler::getReadedData(){
-    return readedData;
-}
 
-void FileHandler::setReadedData(const DataHandler& newReadedData){
-    readedData = newReadedData;
-}
-
-const QString& FileHandler::getFileName() const{
-    return fileName;
-}
-
-void FileHandler::setFileName(const QString& newFileName){
-    fileName = newFileName;
-}
-
-void FileHandler::initExampleFile(){
-    QDomDocument example;
-    QDomElement root=example.createElement("Title");
-    root.setAttribute("Name","Dati d'esempio");
-    example.appendChild(root);
-    int j;
-    for(int i=0;i<5;i++){
-        j=i+1;
-        QDomElement data=example.createElement("Data");
-        data.setAttribute("ID",QString::number(i));
-        data.setAttribute("Label","Default");
-        data.setAttribute("Data",j);
-        root.appendChild(data);
-    }
-    QFile ex("./example.xml");
-    ex.open(QIODevice::WriteOnly);
-    QTextStream stream(&ex);
-    stream<<example.toString();
-    ex.close();
-}
 void FileHandler::saveFile(){
     QDomDocument save;
     QDomElement root=save.createElement("Title");
@@ -91,28 +94,25 @@ void FileHandler::saveFile(){
     stream<<save.toString();
     s.close();
 }
-void FileHandler::saveNewFile(QString path){
+
+void FileHandler::saveNewFile(const QString& path){
      setFileName(path);
      saveFile();
+}
+
+void FileHandler::addData(const Data& d){
+    readedData.insertData(d);
+}
+
+void FileHandler::editData(const Data& d, const int& index){
+    readedData.editData(d,index);
+}
+
+void FileHandler::deleteData(const int& index){
+    readedData.deleteData(index);
 }
 
 void FileHandler::clearData(){
     DataHandler noData=DataHandler();
     readedData=noData;
-}
-
-void FileHandler::addData(Data d){
-    readedData.insertData(d);
-}
-
-void FileHandler::editData(Data d, int index){
-    readedData.editData(d,index);
-}
-
-void FileHandler::deleteData(int index){
-    readedData.deleteData(index);
-}
-
-void FileHandler::setTitle(QString title){
-    readedData.setTitle(title.toStdString());
 }

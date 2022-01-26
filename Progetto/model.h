@@ -6,15 +6,16 @@ private:
     FileHandler file;
 public:
     Model();
-    DataHandler& readFile(QString path="./example.xml");
+    DataHandler& readFile(const QString& path="./example.xml");
     void saveFile();
     DataHandler& getData();
-    DataHandler& readExampleFile(QString path="./example.xml");
-    void setData(DataHandler d);
-    void saveNewFile(QString path);
-    void editData(DataHandler dh);
-    void deleteData(int index);
-    void setTitle(QString title);
+    DataHandler& readExampleFile(const QString& path="./example.xml");
+    void setData(const DataHandler& d);
+    void saveNewFile(const QString& path);
+    void editData(const DataHandler& dh);
+    void deleteData(const int& index);
+    void setTitle(const QString& title);
+    void addData();
 };
 
 #endif // MODEL_H
