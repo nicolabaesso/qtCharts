@@ -24,19 +24,27 @@ Window::Window(QWidget *parent):QWidget(parent){
 void Window::initMenu(QHBoxLayout* mainLayout){
     QMenuBar* menuBar = new QMenuBar(this);
     file = new QMenu("File",menuBar);
+    edit=new QMenu("Modifica",menuBar);
     chart = new QMenu("Grafico",menuBar);
+    about=new QMenu("Aiuto",menuBar);
     file->addAction(new QAction("Nuovo",file));
     file->addAction(new QAction("Apri",file));
     file->addAction(new QAction("Salva",file));
     file->addAction(new QAction("Salva con nome",file));
     file->addAction(new QAction("Chiudi",file));
+    edit->addAction(new QAction("Aggiungi un dato",edit));
+    edit->addAction(new QAction("Salva i dati",edit));
+    edit->addAction(new QAction("Elimina un dato",edit));
     chart->addAction(new QAction("Cambia il titolo",chart));
     chart->addAction(new QAction("Mostra Istogramma",chart));
     chart->addAction(new QAction("Mostra Diagramma Cartesiano",chart));
     chart->addAction(new QAction("Mostra Areogramma (a torta)",chart));
+    about->addAction(new QAction("Informazioni su QtCharts...",about));
 
     menuBar->addMenu(file);
+    menuBar->addMenu(edit);
     menuBar->addMenu(chart);
+    menuBar->addMenu(about);
     mainLayout->addWidget(menuBar);
 }
 
@@ -81,11 +89,11 @@ void Window::initDataFrame(QFrame* dataFrame){
     labelInit=new QLabel("Etichetta",dataFrame);
     valueInit=new QLabel("Valore",dataFrame);
     addDataButton=new QPushButton(this);
-    addDataButton->setText("Aggiungi dati");
+    addDataButton->setText("Aggiungi un dato");
     saveDataButton=new QPushButton(this);
     saveDataButton->setText("Salva dati");
     deleteDataButton=new QPushButton(this);
-    deleteDataButton->setText("Elimina dati");
+    deleteDataButton->setText("Elimina un dato");
     dataFrame->setLayout(dataL);
     dataL->addWidget(addDataButton,rowGridLayoutData,0);
     dataL->addWidget(saveDataButton,rowGridLayoutData,1);
@@ -258,6 +266,10 @@ void Window::setController(Controller* c){
     connect(chart->actions().at(1),  SIGNAL(triggered()), controller, SLOT(loadBarChart()));
     connect(chart->actions().at(2),  SIGNAL(triggered()), controller, SLOT(loadLineChart()));
     connect(chart->actions().at(3),  SIGNAL(triggered()), controller, SLOT(loadPieChart()));
+    connect(edit->actions().at(0), SIGNAL(triggered()), controller, SLOT(addData()));
+    connect(edit->actions().at(1), SIGNAL(triggered()), controller, SLOT(saveData()));
+    connect(edit->actions().at(2), SIGNAL(triggered()), this, SLOT(deleteData()));
+    connect(about->actions().at(0), SIGNAL(triggered()), this, SLOT(showInfo()));
     connect(newFileButton, SIGNAL(clicked()), controller, SLOT(newFile()));
     connect(openFileButton, SIGNAL(clicked()), controller, SLOT(openFile()));
     connect(saveFileButton, SIGNAL(clicked()), controller, SLOT(saveFile()));
@@ -286,20 +298,22 @@ void Window::checkDataLabel(){
 }
 
 void Window::createChart(){
-    if(dynamic_cast<LineChart*>(activeChart)){
-        static_cast<LineChart*>(activeChart)->setData();
-        showChart(static_cast<LineChart*>(activeChart)->showChart());
-        return;
+    LineChart* activeLineChart=dynamic_cast<LineChart*>(activeChart);
+    if(activeLineChart){
+        activeLineChart->setData();
+        showChart(activeLineChart->showChart());
     }
-    if(dynamic_cast<BarChart*>(activeChart)){
-        static_cast<BarChart*>(activeChart)->setData();
-        showChart(static_cast<BarChart*>(activeChart)->showChart());
-        return;
-    }
-    if(dynamic_cast<PieChart*>(activeChart)){
-        static_cast<PieChart*>(activeChart)->setData();
-        showChart(static_cast<PieChart*>(activeChart)->showChart());
-        return;
+    else{
+        BarChart* activeBarChart=dynamic_cast<BarChart*>(activeChart);
+        if(activeBarChart){
+            activeBarChart->setData();
+            showChart(activeBarChart->showChart());
+        }
+        else{
+            PieChart* activePieChart=static_cast<PieChart*>(activeChart);
+            activePieChart->setData();
+            showChart(activePieChart->showChart());
+        }
     }
 }
 
@@ -380,6 +394,10 @@ void Window::showChangeTitleDialog(){
     changeTitleDialog->show();
     connect(confirmNewTitleButton, SIGNAL(clicked()), controller, SLOT(manageChangeTitle()));
     connect(abortOperationButton, SIGNAL(clicked()), this, SLOT(abortChangeTitle()));
+}
+
+void Window::showInfo(){
+    QMessageBox::about(this,"QtCharts","Versione 1.0.\nCreato con Qt 5.9.5");
 }
 
 void Window::closeNewFileDialog(){

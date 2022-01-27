@@ -7,7 +7,6 @@
 \usepackage[]{natbib}
 \usepackage{hyperref}
 
-
 \newcommand{\denplain}[1]{$\llbracket$#1$\rrbracket$} 
 
 \newcommand{\denote}[2][]{$\llbracket$#2$\rrbracket$^{{\ensuremath #1}}} 
@@ -83,6 +82,7 @@
     27/01/2022 (2 ore): modifica UML
     
     \newpage
+    \hypersetup{hidelinks}
     \tableofcontents
     \newpage
     \section{Introduzione}
@@ -91,7 +91,7 @@
     Il progetto è stato scritto utilizzando l'IDE QtCreator alla versione 4.5.2, ed è stato utilizzata la versione 5.9.5 del framework Qt. 
     La seguente relazione è stata create tramite LaTex utilizzando TexStudio.
     Il codice è stato scritto e testato in Windows 10 (versione 21H1) e in Debian 11 Bullseye.
-    Inoltre, il codice è stato versionato tramite Git ed è anche disponibile (sotto il nome di QtCharts) a \href{https://github.com/nicolabaesso/qtCharts}{questo indirizzo}.
+    Inoltre, il codice è stato versionato tramite Git ed è anche disponibile (sotto il nome di QtCharts) su \href{https://github.com/nicolabaesso/qtCharts}{GitHub}.
     \subsection{Compilazione ed esecuzione in sistemi Linux}
     Per la compilazione "manuale" di questo progetto, sono necessari i seguenti kit:\\
     -qt5-default (Qt 5.9.5)\\
@@ -100,31 +100,49 @@
     \\
     Inoltre, è fondamentale utilizzare il file Progetto.pro, fornito assieme a tutti i sorgenti necessari alla compilazione.\\
     \\
-    La sequenza dei comandi è come segue:\\
+    Dopo essersi posizionati all'interno della cartella contenente il file con estensione .pro (e di conseguenza tutti i sorgenti), si esegui da terminale la seguente sequenza di comandi, esattamente come segue:\\
     -qmake Progetto.pro\\
     -make
     \\
     Alla fine verrà generato un file chiamato Progetto, lo si può eseguire scrivendo ./Progetto\\\\
     L'utilizzo di un file .pro differente (tra cui quello generato da qmake -project) o il mancato utilizzo dei kit riportati non assicura la corretta compilazione del programma.
     \section{Funzionamento dell'applicazione}
-    \subsection{Avvio e schermata iniziale}
-    All'avvio, si verrà accolti dalla seguente schermata:
-    
-    insert image here
-    
-    L'applicazione genera un file di esempio, contenente 5 valori, al fine di mostrare sin dal principio le funzionalità presenti.
-     
-    \subsection{Interfaccia Grafica}
+    \subsection{Avvio e Interfaccia Grafica}
+    All'avvio, l'applicazione genera un file di esempio, contenente 5 valori, al fine di mostrare sin dal principio le funzionalità presenti, come si evince dalla figura 1.
+     \begin{figure}[h!]
+     	\centering
+     	\includegraphics[width=0.6\linewidth]{startProgetto}
+     	\caption{Schermata all'avvio}
+     	\label{fig:startprogetto}
+     \end{figure}
+ 	\\
     L'interfaccia può essere suddivisa in 3 aree principali:\\
-    -la toolbar, con i tasti necessari alla creazione di un nuovo file e al salvataggio di un file, nonchè a cambiare la tipologia di grafico visualizzato e al titolo dello stesso\\
-    -la sezione "dati", che contiene i tasti per l'aggiunta di un nuovo dato, il salvataggio dei dati visibili e l'eliminazione di un determinato dato, oltre ai dati stessi con la possibilità di modifica\\
-    -la sezione "grafici", che contiene la visualizzazione dei dati sotto forma del grafico scelto, costantemente aggiornato ad ogni modifica dei dati
-    
+    -la toolbar, con i tasti necessari alla creazione di un nuovo file e al salvataggio di un file, nonchè a cambiare la tipologia di grafico visualizzato e al titolo dello stesso.\\
+    -la sezione "dati", che contiene i tasti per l'aggiunta di un nuovo dato, il salvataggio dei dati visibili e l'eliminazione di un determinato dato, oltre ai dati stessi con la possibilità di modifica.\\
+    -la sezione "grafici", che contiene la visualizzazione dei dati sotto forma del grafico scelto, costantemente aggiornato ad ogni modifica dei dati.\\\\
+    Di seguito s'illustrano le principali funzionalità dell'applicazione.
+    \subsubsection{Creare un nuovo file}
+    Tramite il pulsante "Nuovo file" o andando su File->Nuovo, si potrà creare un nuovo file. Verrà prima chiesto un titolo, successivamente visualizzato come titolo del grafico, poi verrà chiesto con che nome salvare il file sul quale verranno successivamente effettuate le modifiche. alla fine si avrà un file vuoto, con solo il titolo impostato.
+    \subsubsection{Apertura di un file}
+    \subsubsection{Salvataggio del file e salvataggio in un nuovo file}
+    \subsubsection{Cambiare il titolo}
+    \subsubsection{Visualizzare un grafico a punti (diagramma cartesiano)}
+    \subsubsection{Visualizzare un grafico a barre (istogramma)}
+    \subsubsection{Visualizzare un grafico a torta (areogramma a torta)}
+    \subsubsection{Uscire dall'applicazione}
     \section{Tempistiche(Ore di lavoro)}
     \section{Caratteristiche tecniche}
     \subsection{URL e classi coinvolte}
-    insert image here\\
+    
     Al fine di evitare l'utilizzo di codice non estensibile, si è optato per l'utilizzo del modello MCV, che utilizza tre elementi (Model, View e Controller) per una migliore gestione degli eventi. Inoltre, come spiegato in maniera dettagliata successivamente, ogni classe presente nell'applicativo ha un ruolo ben preciso nella funzionalità.
+    
+    \begin{figure}[h!]
+    	\centering
+    	\includegraphics[width=0.7\linewidth]{UML\string_Classi}
+    	\caption{UML del progetto}
+    	\label{fig:umlclassi}
+    \end{figure}
+
     \subsubsection{Classe Data}
     La classe Data rappresenta un singolo dato letto da file, o generato automaticamente all' avvio (si veda la sezione "Avvio e schermata iniziale" per maggiori dettagli).
     Tale classe è composta da una stringa, che rappresenta una breve descrizione del dato, e un valore numerico di tipo double, che rappresenta il valore del dato. Sebbene per molte circostanze un valore di tipo double sia eccessivo, si è ritenuto adatto a rappresentare la maggior parte dei dati possibili.
@@ -141,14 +159,35 @@
     \subsubsection{Classe Window}
     La classe Window si occupa di ogni particolare relativo all'interfaccia grafica. In altre parole, Si occupa della visualizzazione dei dati e dei grafici, nonchè alla creazione e visualizzazione dei vari menù e finestre. Contiene svariati campi, tra cui di tipo QPushButton*, QMenu*,QDialog*...\\Inoltre, ha un campo di tipo Controller* per associare ogni elemento interagibile ad un determinato segnale.
     \subsubsection{Classe Chart}
+    La classe Chart rappresenta un grafico generico, e contiene un unico campo DataHandler per i dati necessari alla creazione dello stesso. Essendo un generico grafico, necessità di un'ulteriore implementazione, fornita da altre 3 classi, nonchè sottoclassi di Chart (si veda Gerarchie di Tipi per maggiori dettagli).
+    Le sue relative sottoclassi utilizzano il modulo QtCharts per rappresentare graficamente i dati.
     \subsubsection{Classe BarChart}
+    La classe BarChart rappresenta un semplice istogramma. Sottoclasse di Chart, ne eredita i dati per la visualizzazione grafica degli stessi, e ha un ulteriore campo int che indica il numero di set di barre da visualizzare.
     \subsubsection{Classe LineChart}
+    La classe LineChart rappresenta un diagramma cartesiano.Anch'essa sottoclasse di Chart, ne eredita i dati per la visualizzazione grafica degli stessi, e ha un ulteriore campo int che indica il numero di punti da disegnare nel grafico. Inoltre, è l'unico grafico a non usare una leggenda.
     \subsubsection{Classe PieChart}
-    \subsection{Gerarchie di tipi}
-    \subsection{Chiamate polimorfe}
+    La classe PieChart rappresenta un areogramma a torta, o più semplicemente un grafico a torta. Essendo anche questa classe sottoclasse di Chart, ne eredita i dati per la visualizzazione grafica degli stessi, e ha un ulteriore campo int che indica il numero di fette da creare per visualizzare il grafico.
+    \subsection{Gerarchie di tipi e chiamate polimorfe}
+    Come si evince dall'UML, nel progetto c'è la seguente gerarchia di tipo:\\
+    -Chart\\
+    -BarChart, derivata di Chart\\
+    -LineChart, derivata di Chart\\
+    -PieChart, derivata di Chart\\\\
+    Il motivo è semplice: i grafici visualizzano gli stessi dati, ma in modo diverso l'un dall'altro, quindi è necessario utilizzare un elemento in comune e permettere alle sottoclassi di ricavarsi i dati necessari per la corretta visualizzazione dei dati.
+    \\
+    \\
+    Sempre per lo stesso motivo, il metodo Window::createChart() utilizza un cast ad una delle tre sottoclassi dell'elemento di tipo Chart*, per rendere visibile all'utente finale la rappresentazione grafica dei dati.
     \subsection{Formato di file usato per I/O di file}
-    Per questo progetto si è scelto di utilizzare il formato XML per la memorizzazione dei dati in file. Sebbene sia un formato "vecchio", permette una gestione più ordinata delle informazioni e permette di visualizzarle da un qualunque editor di testo.
-    Per questo motivo, i file letti devono obbligatoriamente avere la formattazione visualizzabile anche da questa immagine: insert image here
+    Per questo progetto si è scelto di utilizzare il formato XML per la memorizzazione dei dati in file. Sebbene sia un formato "vecchio", permette una gestione più ordinata delle informazioni , inoltre è facilmente comprensibile anche all'utente.
+    Per questo motivo, i file letti devono obbligatoriamente avere la formattazione presente nel file generato dall'applicativo, e da ogni file creato con esso. 
+    \begin{figure}[h!]
+    	\centering
+    	\includegraphics[width=0.7\linewidth]{strutturaXML}
+    	\caption{Struttura del file di esempio generato}
+    	\label{fig:strutturaxml}
+    \end{figure}
+    \subsection{Conclusioni}
+    
 	% That's it!
 	
 \end{document}

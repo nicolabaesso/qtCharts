@@ -17,6 +17,7 @@
 #include <QPushButton>
 #include <QLineEdit>
 #include <QComboBox>
+#include <QMessageBox>
 #include "chart.h"
 #include "lineChart.h"
 #include "pieChart.h"
@@ -36,7 +37,9 @@ private:
     vector<QLineEdit*> labelVector;
     vector<QLineEdit*> dataVector;
     QMenu* file;
+    QMenu* edit;
     QMenu* chart;
+    QMenu* about;
     QLineEdit* fileName;
     QLineEdit* newTitle;
     QChartView* chartViewer;
@@ -121,5 +124,6 @@ private slots:
     void abortNewFile();
     void abortChangeTitle();
     void abortDeleteData();
+    void showInfo();
 };
 #endif // WINDOW_H
