@@ -42,14 +42,22 @@ void Controller::updateData(DataHandler dh){
 }
 
 void Controller::deleteData(){
-    int id=view->getDeleteDataComboBoxValue().toInt();
-    view->closeDeleteDialog();
-    model->deleteData(id);
-    model->saveFile();
-    updateData(model->getData());
-    Chart* chart=view->getActiveChart();
-    updateChart(chart);
-    view->showWarning("Dato eliminato con successo!");
+    try{
+        int id=view->getDeleteDataComboBoxValue().toInt();
+        view->closeDeleteDialog();
+        if(view->getDeleteDataComboBoxValue()==nullptr){
+            throw std::runtime_error("Non esiste alcun dato da eliminare.");
+        }
+        model->deleteData(id);
+        model->saveFile();
+        updateData(model->getData());
+        Chart* chart=view->getActiveChart();
+        updateChart(chart);
+        view->showWarning("Dato eliminato con successo!");
+    }
+    catch(std::runtime_error exc){
+        view->showWarning(exc.what());
+    }
 }
 
 void Controller::addData(){
