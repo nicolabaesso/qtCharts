@@ -16,7 +16,6 @@ public:
     void clearData();
     void setReadedData(const DataHandler& newReadedData);
     void setFileName(const QString& newFileName);
-    void saveNewFile(const QString& path);
     void addData(const Data& d);
     void editData(const Data& d, const int& index);
     void deleteData(const int& index);

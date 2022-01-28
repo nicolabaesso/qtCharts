@@ -36,7 +36,7 @@ void Model::saveNewFile(const QString& path){
     if(path == nullptr){
         throw std::runtime_error("Errore: file non salvato. Posizione non corretta.");
     }
-    file.saveNewFile(path);
+    file.setFileName(path);
 }
 
 void Model::addData(){

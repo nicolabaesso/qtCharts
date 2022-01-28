@@ -95,11 +95,6 @@ void FileHandler::saveFile(){
     s.close();
 }
 
-void FileHandler::saveNewFile(const QString& path){
-     setFileName(path);
-     saveFile();
-}
-
 void FileHandler::addData(const Data& d){
     readedData.insertData(d);
 }

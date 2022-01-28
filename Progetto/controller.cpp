@@ -103,7 +103,7 @@ void Controller::saveData(){
         model->saveFile();
         Chart* chart=view->getActiveChart();
         updateChart(chart);
-        view->showWarning("Dati aggiornati con successo!");
+        view->showWarning("File aggiornato e salvato con successo!");
     }
     catch(std::runtime_error exc){
         view->showWarning(exc.what());
@@ -154,7 +154,7 @@ void Controller::saveNewFile(){
     QString path=view->showSaveDialog();
     try{
         model->saveNewFile(path);
-        view->showWarning("File salvato con successo!");
+        saveData();
     }
     catch(std::runtime_error exc){
         view->showWarning(exc.what());
@@ -162,8 +162,7 @@ void Controller::saveNewFile(){
 }
 
 void Controller::saveFile(){
-    model->saveFile();
-    view->showWarning("File salvato con successo!");
+    saveData();
 }
 
 void Controller::loadLineChart(){
