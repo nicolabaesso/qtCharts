@@ -44,10 +44,10 @@ void Controller::updateData(DataHandler dh){
 void Controller::deleteData(){
     try{
         int id=view->getDeleteDataComboBoxValue().toInt();
-        view->closeDeleteDialog();
         if(view->getDeleteDataComboBoxValue()==nullptr){
             throw std::runtime_error("Non esiste alcun dato da eliminare.");
         }
+        view->closeDeleteDialog();
         model->deleteData(id);
         model->saveFile();
         updateData(model->getData());
@@ -57,6 +57,7 @@ void Controller::deleteData(){
     }
     catch(std::runtime_error exc){
         view->showWarning(exc.what());
+        view->closeDeleteDialog();
     }
 }
 
@@ -115,8 +116,8 @@ void Controller::newFile(){
 }
 
 void Controller::manageNewFile(){
-    view->closeNewFileDialog(); 
     QString name=view->getNewFileName();
+    view->closeNewFileDialog();
     DataHandler newFileData=DataHandler(name.toStdString());
     try{
         QString path=view->showSaveDialog();
@@ -125,8 +126,7 @@ void Controller::manageNewFile(){
         }
         model->setData(newFileData);
         model->saveNewFile(path);
-        DataHandler readedData=model->readFile(path);
-        updateData(readedData);
+        updateData(DataHandler(name.toStdString()));
         Chart* chart=view->getActiveChart();
         updateChart(chart);
         view->showWarning("File creato con successo!");
