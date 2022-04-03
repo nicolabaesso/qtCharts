@@ -44,7 +44,7 @@ void Controller::updateData(DataHandler dh){
 void Controller::deleteData(){
     try{
         int id=view->getDeleteDataComboBoxValue().toInt();
-        if(view->getDeleteDataComboBoxValue()==nullptr){
+        if(view->getDeleteDataComboBoxValue() == nullptr){
             throw std::runtime_error("Non esiste alcun dato da eliminare.");
         }
         view->closeDeleteDialog();
