@@ -13,6 +13,16 @@ QChart* PieChart::showChart(){
         labelS=labelS.fromStdString(data.getDataOnFile().at(i).getLabel());
         pieSeries->append(labelS,data.getDataOnFile().at(i).getData());
     }
+    QPieSlice* slice;
+    int r, g, b=0;
+    for(int i=0;i<nSlices;i++){
+        slice=pieSeries->slices().at(i);
+        r=rand()% 256;
+        g=rand()% 256;
+        b=rand()% 256;
+        slice->setColor(QColor(r,g,b));
+    }
+
     pieSeries->setVisible();
     QChart* pieChart=new QChart();
     pieChart->addSeries(pieSeries);

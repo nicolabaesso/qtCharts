@@ -3,6 +3,7 @@
 #include "chart.h"
 #include <QPieSeries>
 #include <QPieSlice>
+#include <stdlib.h>
 
 using QtCharts::QPieSeries;
 using QtCharts::QPieSlice;
